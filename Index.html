@@ -109,17 +109,20 @@
     </div>
 
     <div class="content">
+      <!-- Overview -->
       <div id="overview" class="panel">
         <h2>Account overview</h2>
         <div class="balance">CHF 125,430.55</div>
         <div class="muted">Current balance</div>
       </div>
 
+      <!-- Payments -->
       <div id="payments" class="panel hidden">
         <h2>Payments</h2>
         <p class="muted">Payment form placeholder.</p>
       </div>
 
+      <!-- Transactions -->
       <div id="transactions" class="panel hidden">
         <h2>Recent transactions</h2>
         <table class="table">
@@ -139,31 +142,59 @@
           <tr><td>Swiss Government Bond</td><td>50</td><td>CHF 5,000.00</td><td>+1.1%</td></tr>
           <tr><td>Nestlé Shares</td><td>200</td><td>CHF 22,000.00</td><td>-0.8%</td></tr>
         </table>
+
+        <!-- Line Chart -->
+        <canvas id="investmentsChart" width="400" height="200"></canvas>
+
+        <!-- Legend -->
+        <div id="investmentsLegend" style="margin-top:12px; font-size:13px; color:#374151;">
+          <div style="display:flex;align-items:center;margin-bottom:4px;">
+            <span style="display:inline-block;width:12px;height:12px;background:#003a8f;margin-right:6px;"></span> Credit Suisse Fund
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:4px;">
+            <span style="display:inline-block;width:12px;height:12px;background:#4b5563;margin-right:6px;"></span> Swiss Government Bond
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:4px;">
+            <span style="display:inline-block;width:12px;height:12px;background:#22c55e;margin-right:6px;"></span> Nestlé Shares
+          </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div id="investmentsSummary" style="margin-top:16px; padding:12px; background:#f0f2f5; border-radius:6px; font-size:14px; color:#1a1a1a;">
+          <strong>Total Portfolio Value:</strong> CHF 39,500<br>
+          <span style="color:#22c55e;">▲ Overall Performance: +2.1%</span>
+        </div>
       </div>
 
       <!-- Portfolio Panel -->
       <div id="portfolio" class="panel hidden">
         <h2>Portfolio</h2>
-        <p class="muted">Net worth summary placeholder.</p>
-        <div style="height:200px;background:#f0f2f5;border-radius:4px;
-                    display:flex;align-items:center;justify-content:center;
-                    color:#6b7280;font-size:14px;">
-          Chart placeholder (e.g. pie chart of assets)
-        </div>
+        <p class="muted">Net worth summary</p>
+        <canvas id="portfolioChart" width="300" height="200"></canvas>
       </div>
 
       <!-- Market Services Panel -->
       <div id="markets" class="panel hidden">
         <h2>Market Services</h2>
-        <p class="muted">Live ticker / feed placeholder.</p>
+        <p class="muted">Live ticker and market news</p>
+
+        <!-- Ticker -->
         <div style="background:#f0f2f5;border-radius:4px;padding:10px;
-                    font-size:13px;color:#1a1a1a;">
+                    font-size:13px;color:#1a1a1a;margin-bottom:16px;">
           <marquee behavior="scroll" direction="left">
             SMI +0.8% &nbsp;&nbsp; | &nbsp;&nbsp; Nestlé -0.5% &nbsp;&nbsp; | &nbsp;&nbsp; UBS +1.2% &nbsp;&nbsp; | &nbsp;&nbsp; Credit Suisse Fund +3.2%
           </marquee>
         </div>
+
+        <!-- News Feed -->
+        <div id="newsFeed" style="background:#fff;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.08);
+                    padding:16px;font-size:14px;color:#1a1a1a;">
+          <h3 style="margin-top:0;font-size:16px;color:#002a5c;">Latest Market News</h3>
+          <ul id="newsList" style="list-style:none;padding:0;margin:0;"></ul>
+        </div>
       </div>
 
+      <!-- Settings -->
       <div id="settings" class="panel hidden">
         <h2>Settings</h2>
         <p class="muted">User preferences placeholder.</p>
@@ -184,10 +215,120 @@
     document.getElementById('loginPage').classList.remove('hidden');
   }
 
-  function showSection(id){
-    document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+  // Portfolio Pie Chart
+  function drawPortfolioChart() {
+    const canvas = document.getElementById('portfolioChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const data = [30, 40, 20, 10];
+    const colors = ['#003a8f', '#4b5563', '#22c55e', '#f59e0b'];
+    let startAngle = 0;
+    data.forEach((value, i) => {
+      const sliceAngle = (value / 100) * 2 * Math.PI;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width/2, canvas.height/2);
+      ctx.arc(canvas.width/2, canvas.height/2, 90, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = colors[i];
+      ctx.fill();
+      startAngle += sliceAngle;
+    });
   }
+
+  // Investments Line Chart
+  function drawInvestmentsChart() {
+    const canvas = document.getElementById('investmentsChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const labels = ['Jan','Feb','Mar','Apr','May','Jun'];
+    const datasets = [
+      { name:'Credit Suisse Fund', values:[12000,12500,12300,12800,13000,12900], color:'#003a8f' },
+      { name:'Swiss Government Bond', values:[5000,5050,5075,5100,5120,5150], color:'#4b5563' },
+      { name:'Nestlé Shares', values:[22000,22100,21900,22200,22350,22200], color:'#22c55e' }
+    ];
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Axes
+    ctx.beginPath();
+    ctx.moveTo(40,10);
+    ctx.lineTo(40,180);
+    ctx.lineTo(380,180);
+    ctx.strokeStyle='#374151';
+    ctx.stroke();
+
+    // Plot datasets
+      datasets.forEach(dataset=>{
+        ctx.beginPath();
+        ctx.strokeStyle = dataset.color;
+        ctx.lineWidth = 2;
+        dataset.values.forEach((val,i)=>{
+          const x = 40 + i * 60; // spacing
+          const y = 180 - ((val - 5000) / 20000) * 150; // scale values
+          if(i===0) ctx.moveTo(x,y);
+          else ctx.lineTo(x,y);
+          // Draw point
+          ctx.fillStyle = dataset.color;
+          ctx.beginPath();
+          ctx.arc(x,y,3,0,2*Math.PI);
+          ctx.fill();
+        });
+        ctx.stroke();
+      });
+
+      // Labels
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = '12px Arial';
+      labels.forEach((label,i)=>{
+        const x = 40 + i * 60;
+        ctx.fillText(label, x - 10, 195);
+      });
+
+      // Update summary dynamically
+      const totalValue = datasets.reduce((sum,d)=>sum + d.values[d.values.length-1],0);
+      const overallPerf = ((totalValue - 39000) / 39000 * 100).toFixed(1); // baseline example
+      const summary = document.getElementById('investmentsSummary');
+      if(summary){
+        summary.innerHTML = `<strong>Total Portfolio Value:</strong> CHF ${totalValue.toLocaleString()}<br>
+          <span style="color:${overallPerf >= 0 ? '#22c55e' : '#ef4444'};">
+          ${overallPerf >= 0 ? '▲' : '▼'} Overall Performance: ${overallPerf}%</span>`;
+      }
+    }
+  
+    // News Feed (static demo headlines cycling)
+    const headlines = [
+      { title: "Swiss Market Index rises", summary: "Investors optimistic after strong Q4 earnings." },
+      { title: "Nestlé reports steady growth", summary: "Food giant posts 2% revenue increase in latest quarter." },
+      { title: "UBS expands wealth management", summary: "Bank announces new digital advisory services." },
+      { title: "Global markets mixed", summary: "US tech stocks dip while European banks gain." },
+      { title: "Credit Suisse Fund outperforms", summary: "Fund posts 3.2% growth amid volatile conditions." }
+    ];
+    let currentIndex = 0;
+    function refreshNewsFeed() {
+      const list = document.getElementById('newsList');
+      if (!list) return;
+      list.innerHTML = "";
+      for (let i = 0; i < 3; i++) {
+        const item = headlines[(currentIndex + i) % headlines.length];
+        const li = document.createElement('li');
+        li.style.marginBottom = "10px";
+        li.innerHTML = `<strong>${item.title}</strong><br><span class="muted">${item.summary}</span>`;
+        list.appendChild(li);
+      }
+      currentIndex = (currentIndex + 1) % headlines.length;
+    }
+
+    // Show section logic
+    function showSection(id){
+      document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      if(id === 'portfolio') drawPortfolioChart();
+      if(id === 'investments') drawInvestmentsChart();
+      if(id === 'markets') {
+        refreshNewsFeed();
+        setInterval(refreshNewsFeed, 10000);
+      }
+    }
 </script>
 </body>
 </html>
