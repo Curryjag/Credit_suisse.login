@@ -95,68 +95,99 @@
   </div>
 
   <!-- DASHBOARD -->
-  <div id="dashboard" class="hidden">
-    <div class="dash-wrapper">
-      <div class="sidebar">
-        <a href="#" onclick="showSection('overview')">Account overview</a>
-        <a href="#" onclick="showSection('payments')">Payments</a>
-        <a href="#" onclick="showSection('transactions')">Transactions</a>
-        <a href="#" onclick="showSection('transactions')">Investments</a>
-        <a href="#" onclick="showSection('settings')">Settings</a>
-        <a href="#" onclick="logout()">Log out</a>
+<div id="dashboard" class="hidden">
+  <div class="dash-wrapper">
+    <div class="sidebar">
+      <a href="#" onclick="showSection('overview')">Account overview</a>
+      <a href="#" onclick="showSection('payments')">Payments</a>
+      <a href="#" onclick="showSection('transactions')">Transactions</a>
+      <a href="#" onclick="showSection('investments')">Investments</a>
+      <a href="#" onclick="showSection('portfolio')">Portfolio</a>
+      <a href="#" onclick="showSection('markets')">Market Services</a>
+      <a href="#" onclick="showSection('settings')">Settings</a>
+      <a href="#" onclick="logout()">Log out</a>
+    </div>
+
+    <div class="content">
+      <div id="overview" class="panel">
+        <h2>Account overview</h2>
+        <div class="balance">CHF 125,430.55</div>
+        <div class="muted">Current balance</div>
       </div>
 
-      <div class="content">
-        <div id="overview" class="panel">
-          <h2>Account overview</h2>
-          <div class="balance">CHF 125,430.55</div>
-          <div class="muted">Current balance</div>
-        </div>
+      <div id="payments" class="panel hidden">
+        <h2>Payments</h2>
+        <p class="muted">Payment form placeholder.</p>
+      </div>
 
-        <div id="payments" class="panel hidden">
-          <h2>Payments</h2>
-          <p class="muted">Payment form placeholder.</p>
-        </div>
+      <div id="transactions" class="panel hidden">
+        <h2>Recent transactions</h2>
+        <table class="table">
+          <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
+          <tr><td>12 Jan 2026</td><td>Salary</td><td>+ CHF 4,500.00</td></tr>
+          <tr><td>10 Jan 2026</td><td>Rent</td><td>- CHF 1,800.00</td></tr>
+          <tr><td>08 Jan 2026</td><td>Utilities</td><td>- CHF 230.00</td></tr>
+        </table>
+      </div>
 
-        <div id="transactions" class="panel hidden">
-          <h2>Recent transactions</h2>
-          <table class="table">
-            <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
-            <tr><td>12 Jan 2026</td><td>Salary</td><td>+ CHF 4,500.00</td></tr>
-            <tr><td>10 Jan 2026</td><td>Rent</td><td>- CHF 1,800.00</td></tr>
-            <tr><td>08 Jan 2026</td><td>Utilities</td><td>- CHF 230.00</td></tr>
-          </table>
-        </div>
+      <!-- Investments Panel -->
+      <div id="investments" class="panel hidden">
+        <h2>Investments</h2>
+        <table class="table">
+          <tr><th>Asset</th><th>Quantity</th><th>Value (CHF)</th><th>Performance</th></tr>
+          <tr><td>Credit Suisse Fund</td><td>120</td><td>CHF 12,500.00</td><td>+3.2%</td></tr>
+          <tr><td>Swiss Government Bond</td><td>50</td><td>CHF 5,000.00</td><td>+1.1%</td></tr>
+          <tr><td>Nestlé Shares</td><td>200</td><td>CHF 22,000.00</td><td>-0.8%</td></tr>
+        </table>
+      </div>
 
-        <div id="Investments" class="panel hidden">
-          <h2>Payments</h2>
-          <p class="muted">investment placeholder.</p>
+      <!-- Portfolio Panel -->
+      <div id="portfolio" class="panel hidden">
+        <h2>Portfolio</h2>
+        <p class="muted">Net worth summary placeholder.</p>
+        <div style="height:200px;background:#f0f2f5;border-radius:4px;
+                    display:flex;align-items:center;justify-content:center;
+                    color:#6b7280;font-size:14px;">
+          Chart placeholder (e.g. pie chart of assets)
         </div>
+      </div>
 
-        <div id="settings" class="panel hidden">
-          <h2>Settings</h2>
-          <p class="muted">User preferences placeholder.</p>
+      <!-- Market Services Panel -->
+      <div id="markets" class="panel hidden">
+        <h2>Market Services</h2>
+        <p class="muted">Live ticker / feed placeholder.</p>
+        <div style="background:#f0f2f5;border-radius:4px;padding:10px;
+                    font-size:13px;color:#1a1a1a;">
+          <marquee behavior="scroll" direction="left">
+            SMI +0.8% &nbsp;&nbsp; | &nbsp;&nbsp; Nestlé -0.5% &nbsp;&nbsp; | &nbsp;&nbsp; UBS +1.2% &nbsp;&nbsp; | &nbsp;&nbsp; Credit Suisse Fund +3.2%
+          </marquee>
         </div>
+      </div>
+
+      <div id="settings" class="panel hidden">
+        <h2>Settings</h2>
+        <p class="muted">User preferences placeholder.</p>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    function login(){
-      document.getElementById('loginPage').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-      showSection('overview');
-    }
+<script>
+  function login(){
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    showSection('overview');
+  }
 
-    function logout(){
-      document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('loginPage').classList.remove('hidden');
-    }
+  function logout(){
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+  }
 
-    function showSection(id){
-      document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-  </script>
+  function showSection(id){
+    document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+</script>
 </body>
 </html>
