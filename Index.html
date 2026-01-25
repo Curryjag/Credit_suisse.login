@@ -2,155 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Credit Suisse Demo Bank</title>
+  <title>Credit Suisse Demo Clone</title>
   <style>
-    body {
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      background: #f5f7fa;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #002147; /* Credit Suisse navy */
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 60px);
-    }
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 350px;
-      text-align: center;
-    }
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      padding: 12px 20px;
-      background: #002147;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #004080;
-    }
-    .hidden { display: none; }
-    .balance {
-      font-size: 1.5em;
-      margin: 20px 0;
-      color: #002147;
-    }
-    .actions button {
-      display: block;
-      margin: 8px auto;
-      width: 80%;
-    }
-    .section {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      text-align: left;
-    }
-    .section h3 {
-      color: #002147;
-    }
+    body { font-family: Helvetica, Arial, sans-serif; background:#f5f7fa; margin:0; }
+    header { background:#002147; color:white; padding:15px; text-align:left; font-size:1.2em; }
+    .login-box, .dashboard { max-width:400px; margin:80px auto; background:white; padding:30px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+    input { width:100%; padding:12px; margin:10px 0; border:1px solid #ccc; border-radius:4px; }
+    button { width:100%; padding:12px; background:#002147; color:white; border:none; border-radius:4px; cursor:pointer; }
+    button:hover { background:#004080; }
+    .hidden { display:none; }
+    .balance { font-size:1.5em; color:#002147; margin:20px 0; }
+    nav { background:#004080; color:white; padding:10px; }
+    nav a { color:white; margin-right:15px; text-decoration:none; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { border-bottom:1px solid #ddd; padding:8px; text-align:left; }
   </style>
 </head>
 <body>
 
-  <header>Credit Suisse Demo Bank</header>
+<header>Credit Suisse Online Banking</header>
 
-  <div class="container">
-    <!-- Login Page -->
-    <div class="box" id="loginBox">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-      <p id="error" style="color:red;"></p>
-    </div>
+<div class="login-box" id="loginBox">
+  <h2>Secure Login</h2>
+  <input type="text" id="username" placeholder="User ID">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="error" style="color:red;"></p>
+</div>
 
-    <!-- Dashboard -->
-    <div class="box hidden" id="dashboard">
-      <h2>Welcome, Demo User</h2>
-      <div class="balance">Balance: $5,000.00</div>
-      <div class="actions">
-        <button onclick="showSection('transactions')">View Transactions</button>
-        <button onclick="showSection('transfer')">Transfer Money</button>
-        <button onclick="showSection('loan')">Apply for Loan</button>
-        <button onclick="logout()">Logout</button>
-      </div>
-
-      <!-- Sections -->
-      <div id="transactions" class="section hidden">
-        <h3>Recent Transactions</h3>
-        <ul>
-          <li>+ $1,200 Salary Deposit</li>
-          <li>- $200 Grocery Store</li>
-          <li>- $50 Utility Bill</li>
-        </ul>
-      </div>
-
-      <div id="transfer" class="section hidden">
-        <h3>Transfer Money</h3>
-        <input type="text" placeholder="Recipient Name">
-        <input type="number" placeholder="Amount">
-        <button onclick="alert('Transfer Successful!')">Submit Transfer</button>
-      </div>
-
-      <div id="loan" class="section hidden">
-        <h3>Loan Application</h3>
-        <input type="text" placeholder="Loan Type">
-        <input type="number" placeholder="Amount Requested">
-        <button onclick="alert('Loan Application Submitted!')">Apply</button>
-      </div>
-    </div>
+<div class="dashboard hidden" id="dashboard">
+  <nav>
+    <a href="#" onclick="showSection('accounts')">Accounts</a>
+    <a href="#" onclick="showSection('payments')">Payments</a>
+    <a href="#" onclick="showSection('investments')">Investments</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+  <div id="accounts">
+    <h2>Account Overview</h2>
+    <div class="balance">Balance: $5,000.00</div>
+    <table>
+      <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
+      <tr><td>Jan 20</td><td>Salary Deposit</td><td>+ $1,200</td></tr>
+      <tr><td>Jan 22</td><td>Grocery Store</td><td>- $200</td></tr>
+      <tr><td>Jan 23</td><td>Utility Bill</td><td>- $50</td></tr>
+    </table>
   </div>
+</div>
 
-  <script>
-    function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      const error = document.getElementById("error");
-
-      if (user === "demoUser" && pass === "demoPass") {
-        document.getElementById("loginBox").classList.add("hidden");
-        document.getElementById("dashboard").classList.remove("hidden");
-      } else {
-        error.textContent = "Invalid username or password!";
-      }
-    }
-
-    function logout() {
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-    }
-
-    function showSection(sectionId) {
-      document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
-      document.getElementById(sectionId).classList.remove("hidden");
-    }
-  </script>
+<script>
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  if (user === "demoUser" && pass === "demoPass") {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  } else {
+    document.getElementById("error").textContent = "Invalid credentials!";
+  }
+}
+function logout() {
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
+}
+function showSection(id) {
+  alert("This would load the " + id + " section in a real system.");
+}
+</script>
 
 </body>
 </html>
