@@ -110,10 +110,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 function initializePage() {
-  // Always start with login visible, dashboard + modal hidden
   document.getElementById("loginBox").classList.remove("hidden");
   document.getElementById("dashboard").classList.add("hidden");
   document.getElementById("modal").classList.add("hidden");
@@ -153,7 +151,8 @@ function confirmTransfer(){
     return;
   }
   document.getElementById("paymentError").textContent="";
-  document.getElementById("modalText").textContent=`Confirm transfer of ${currency} ${amount} to ${recipient} (${bankName}, ${accountNumber}, SWIFT: ${swift})?`;
+  document.getElementById("modalText").textContent =
+    `Confirm transfer of ${currency} ${amount} to ${recipient} (${bankName}, ${accountNumber}, SWIFT: ${swift})?`;
   document.getElementById("modal").classList.remove("hidden");
 }
 
@@ -203,6 +202,5 @@ function renderChart(){
   });
 }
 </script>
-
 </body>
 </html>
