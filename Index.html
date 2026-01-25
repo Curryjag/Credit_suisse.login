@@ -162,12 +162,21 @@ function closeModal(){
 
 function executeTransfer(){
   const recipient=document.getElementById("recipient").value;
-  const amount=document.getElementById("amount").value;
+  const amount=parseFloat(document.getElementById("amount").value);
   const currency=document.getElementById("currency").value;
+
+  // Update transaction table
   const table=document.getElementById("transactionTable");
   const row=table.insertRow(-1);
   const today=new Date().toLocaleDateString();
   row.innerHTML=`<td>${today}</td><td>Transfer to ${recipient}</td><td>- ${currency} ${amount}</td>`;
+
+  // Update balance
+  const balanceElement=document.getElementById("balance");
+  let currentBalance=parseFloat(balanceElement.textContent.replace(/[^0-9.-]+/g,""));
+  currentBalance-=amount;
+  balanceElement.textContent=`Balance: $${currentBalance.toFixed(2)}`;
+
   document.getElementById("modal").classList.add("hidden");
   alert("Transfer Successful!");
   showSection('accounts');
@@ -202,6 +211,5 @@ function renderChart(){
   });
 }
 </script>
-
 </body>
 </html>
