@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Credit Suisse Demo Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="assets/logo.png">
   <style>
     :root {
       --primary: #002147;
@@ -12,15 +11,17 @@
       --bg: #f5f7fa;
     }
     body { font-family: Helvetica, Arial, sans-serif; margin:0; background:var(--bg); }
-    header { background:var(--primary); padding:15px; display:flex; align-items:center; }
+    header { background:var(--primary); padding:15px; display:flex; align-items:center; justify-content:center; }
     header img { height:40px; }
     .container { display:flex; justify-content:center; align-items:center; height:calc(100vh - 60px); }
     .card { background:white; padding:30px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:100%; max-width:400px; }
     input, button { width:100%; padding:12px; margin:10px 0; border-radius:4px; }
     input { border:1px solid #ccc; }
-    button { background:var(--primary); color:white; border:none; font-weight:bold; }
+    button { background:var(--primary); color:white; border:none; font-weight:bold; cursor:pointer; }
     button:hover { background:var(--secondary); }
     .hidden { display:none; }
+
+    /* Dashboard Layout */
     .dashboard { display:flex; height:calc(100vh - 60px); }
     .sidebar { background:var(--primary); color:white; width:220px; padding:20px; }
     .sidebar a { display:block; color:white; text-decoration:none; margin:15px 0; font-weight:bold; }
@@ -29,6 +30,8 @@
     table { width:100%; border-collapse:collapse; background:white; border-radius:6px; overflow:hidden; }
     th, td { padding:12px; border-bottom:1px solid #ddd; text-align:left; }
     th { background:var(--secondary); color:white; }
+
+    /* Responsive */
     @media (max-width:768px) {
       .dashboard { flex-direction:column; }
       .sidebar { width:100%; display:flex; justify-content:space-around; }
@@ -39,7 +42,8 @@
 <body>
 
 <header>
-  <img src="assets/logo.png" alt="Credit Suisse Logo">
+  <!-- Replace with official logo file -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Credit_Suisse_Logo.svg" alt="Credit Suisse Logo">
 </header>
 
 <!-- Login -->
