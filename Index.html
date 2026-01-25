@@ -1,27 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title>Credit Suisse Demo Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root { --primary:#002147; --secondary:#004080; --bg:#f5f7fa; }
+    body { font-family:Helvetica, Arial, sans-serif; margin:0; background:var(--bg); }
+    header { background:var(--primary); padding:15px; display:flex; justify-content:center; }
+    header img { height:40px; }
+    .container { display:flex; justify-content:center; align-items:center; height:calc(100vh - 60px); }
+    .card { background:white; padding:30px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:100%; max-width:400px; }
+    input, select, button { width:100%; padding:12px; margin:10px 0; border-radius:4px; }
+    input, select { border:1px solid #ccc; }
+    button { background:var(--primary); color:white; border:none; font-weight:bold; cursor:pointer; }
+    button:hover { background:var(--secondary); }
     .hidden { display:none; }
+    .dashboard { display:flex; height:calc(100vh - 60px); }
+    .sidebar { background:var(--primary); color:white; width:220px; padding:20px; }
+    .sidebar a { display:block; color:white; text-decoration:none; margin:15px 0; font-weight:bold; }
+    .main { flex:1; padding:20px; }
+    .balance { font-size:2em; color:var(--primary); margin-bottom:20px; }
+    table { width:100%; border-collapse:collapse; background:white; border-radius:6px; overflow:hidden; }
+    th, td { padding:12px; border-bottom:1px solid #ddd; text-align:left; }
+    th { background:var(--secondary); color:white; }
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; }
+    .modal-content { background:white; padding:20px; border-radius:8px; width:350px; text-align:center; }
+    @media(max-width:768px){ .dashboard{flex-direction:column;} .sidebar{width:100%; display:flex; justify-content:space-around;} }
   </style>
 </head>
 <body onload="initializePage()">
 
-<div id="loginBox">
-  <h2>Login</h2>
-  <button onclick="login()">Login</button>
+<header>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Credit_Suisse_Logo.svg" alt="Credit Suisse Logo">
+</header>
+
+<!-- Login -->
+<div class="container" id="loginBox">
+  <div class="card">
+    <h2>Secure Login</h2>
+    <input type="text" id="username" placeholder="User ID">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>
 </div>
 
-<div id="dashboard" class="hidden">
-  <h2>Dashboard</h2>
-  <button onclick="logout()">Logout</button>
+<!-- Dashboard -->
+<div class="dashboard hidden" id="dashboard">
+  <div class="sidebar">
+    <a href="#" onclick="showSection('accounts')">Accounts</a>
+    <a href="#" onclick="showSection('payments')">Payments</a>
+    <a href="#" onclick="showSection('investments')">Investments</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="main">
+    <!-- Accounts -->
+    <div id="accounts">
+      <h2>Account Overview</h2>
+      <div class="balance" id="balance">Balance: $5000.00</div>
+      <button onclick="showSection('payments')">Make a Transfer</button>
+      <table id="transactionTable">
+        <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
+        <tr><td>Jan 20</td><td>Salary Deposit</td><td>+ $1200</td></tr>
+        <tr><td>Jan 22</td><td>Grocery Store</td><td>- $200</td></tr>
+        <tr><td>Jan 23</td><td>Utility Bill</td><td>- $50</td></tr>
+      </table>
+    </div>
+
+    <!-- Payments -->
+    <div id="payments" class="hidden">
+      <h2>Transfer Money</h2>
+      <select id="fromAccount">
+        <option value="Checking">Checking Account</option>
+        <option value="Savings">Savings Account</option>
+      </select>
+      <input type="text" id="recipient" placeholder="Recipient Name">
+      <input type="text" id="accountNumber" placeholder="Recipient Account Number / IBAN">
+      <input type="text" id="bankName" placeholder="Bank Name">
+      <input type="text" id="swiftCode" placeholder="SWIFT/BIC Code">
+      <input type="number" id="amount" placeholder="Amount">
+      <select id="currency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </select>
+      <input type="text" id="reference" placeholder="Payment Reference">
+      <input type="date" id="transferDate">
+      <button onclick="confirmTransfer()">Submit Transfer</button>
+      <p id="paymentError" style="color:red;"></p>
+    </div>
+
+    <!-- Investments -->
+    <div id="investments" class="hidden">
+      <h2>Investments</h2>
+      <p>Portfolio Value: $20,000</p>
+      <canvas id="investmentChart"></canvas>
+    </div>
+  </div>
 </div>
 
-<div id="modal" class="hidden">
-  <h2>Modal</h2>
-  <button onclick="closeModal()">Close</button>
+<!-- Modal -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <p id="modalText"></p>
+    <button onclick="executeTransfer()">Confirm</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 function initializePage() {
   document.getElementById("loginBox").classList.remove("hidden");
@@ -30,8 +118,15 @@ function initializePage() {
 }
 
 function login(){
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
+  const user=document.getElementById("username").value;
+  const pass=document.getElementById("password").value;
+  if(user==="demoUser" && pass==="demoPass"){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    renderChart();
+  } else {
+    document.getElementById("error").textContent="Invalid credentials!";
+  }
 }
 
 function logout(){
@@ -39,10 +134,82 @@ function logout(){
   document.getElementById("loginBox").classList.remove("hidden");
 }
 
-function closeModal(){
+function showSection(id){
+  document.querySelectorAll(".main > div").forEach(sec=>sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function confirmTransfer(){
+  const recipient=document.getElementById("recipient").value;
+  const accountNumber=document.getElementById("accountNumber").value;
+  const bankName=document.getElementById("bankName").value;
+  const swift=document.getElementById("swiftCode").value;
+  const amount=document.getElementById("amount").value;
+  const currency=document.getElementById("currency").value;
+  if(!recipient || !accountNumber || !bankName || !swift || amount<=0){
+    document.getElementById("paymentError").textContent="Please fill all required fields correctly.";
+    return; 
+  }
+  document.getElementById("paymentError").textContent="";
+  document.getElementById("modalText").textContent =
+    `Confirm transfer of ${currency} ${amount} to ${recipient} (${bankName}, ${accountNumber}, SWIFT: ${swift})?`;
+  document.getElementById("modal").classList.remove("hidden");
+}
+
+function closeModal(){ 
+  document.getElementById("modal").classList.add("hidden"); 
+}
+
+function executeTransfer(){
+  const recipient=document.getElementById("recipient").value;
+  const amount=parseFloat(document.getElementById("amount").value);
+  const currency=document.getElementById("currency").value;
+
+  // Update transaction table
+  const table=document.getElementById("transactionTable");
+  const row=table.insertRow(-1);
+  const today=new Date().toLocaleDateString();
+  row.innerHTML=`<td>${today}</td><td>Transfer to ${recipient}</td><td>- ${currency} ${amount}</td>`;
+
+  // Update balance
+  const balanceElement=document.getElementById("balance");
+  let currentBalance=parseFloat(balanceElement.textContent.replace(/[^0-9.-]+/g,""));
+  currentBalance-=amount;
+  balanceElement.textContent=`Balance: $${currentBalance.toFixed(2)}`;
+
   document.getElementById("modal").classList.add("hidden");
+  alert("Transfer Successful!");
+  showSection('accounts');
+}
+
+function renderChart(){
+  const ctx=document.getElementById('investmentChart').getContext('2d');
+  new Chart(ctx,{
+    type:'pie',
+    data:{
+      labels:['Stocks','Bonds','Funds'],
+      datasets:[{
+        data:[12000,5000,3000],
+        backgroundColor:['#004080','#0077b6','#90e0ef']
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{
+          position:'bottom',
+          labels:{ color:'#002147', font:{ size:14 } }
+        },
+        title:{
+          display:true,
+          text:'Investment Portfolio Breakdown',
+          color:'#002147',
+          font:{ size:16, weight:'bold' }
+        }
+      }
+    }
+  });
 }
 </script>
-
 </body>
 </html>
