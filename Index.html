@@ -148,7 +148,7 @@ function confirmTransfer(){
   const currency=document.getElementById("currency").value;
   if(!recipient || !accountNumber || !bankName || !swift || amount<=0){
     document.getElementById("paymentError").textContent="Please fill all required fields correctly.";
-    return;
+    return; 
   }
   document.getElementById("paymentError").textContent="";
   document.getElementById("modalText").textContent =
@@ -202,5 +202,6 @@ function renderChart(){
   });
 }
 </script>
+
 </body>
 </html>
