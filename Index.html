@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Demo Login</title>
+  <title>Demo Portal</title>
   <style>
     body { font-family: Arial, sans-serif; background:#f5f7fa; margin:0; }
     .container { display:flex; justify-content:center; align-items:center; height:100vh; }
@@ -12,12 +12,16 @@
     button { background:#002147; color:white; border:none; font-weight:bold; cursor:pointer; }
     button:hover { background:#004080; }
     .hidden { display:none; }
-    .balance { font-size:1.5em; color:#002147; margin-top:20px; }
+    .dashboard { display:flex; }
+    .sidebar { background:#002147; color:white; width:200px; padding:20px; }
+    .sidebar a { display:block; color:white; text-decoration:none; margin:10px 0; }
+    .main { flex:1; padding:20px; }
+    .balance { font-size:1.5em; color:#002147; margin-bottom:20px; }
   </style>
 </head>
 <body onload="initializePage()">
 
-<!-- Login Box -->
+<!-- Login -->
 <div class="container" id="loginBox">
   <div class="card">
     <h2>Secure Login</h2>
@@ -29,11 +33,32 @@
 </div>
 
 <!-- Dashboard -->
-<div class="container hidden" id="dashboard">
-  <div class="card">
-    <h2>Dashboard</h2>
-    <div class="balance">Balance: $5000.00</div>
-    <button onclick="logout()">Logout</button>
+<div class="dashboard hidden" id="dashboard">
+  <div class="sidebar">
+    <a href="#" onclick="showSection('accounts')">Accounts</a>
+    <a href="#" onclick="showSection('payments')">Payments</a>
+    <a href="#" onclick="showSection('investments')">Investments</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="main">
+    <!-- Accounts -->
+    <div id="accounts">
+      <h2>Account Overview</h2>
+      <div class="balance">Balance: $5000.00</div>
+      <button onclick="showSection('payments')">Make a Transfer</button>
+    </div>
+
+    <!-- Payments -->
+    <div id="payments" class="hidden">
+      <h2>Transfer Money</h2>
+      <p>Payment form goes here...</p>
+    </div>
+
+    <!-- Investments -->
+    <div id="investments" class="hidden">
+      <h2>Investments</h2>
+      <p>Investment chart goes here...</p>
+    </div>
   </div>
 </div>
 
@@ -43,7 +68,7 @@ function initializePage() {
   document.getElementById("dashboard").classList.add("hidden");
 }
 
-// Encoded credentials (simple base64 for demo)
+// Encoded credentials
 const encodedUser = btoa("demoUser");   // "ZGVtb1VzZXI="
 const encodedPass = btoa("demoPass");   // "ZGVtb1Bhc3M="
 
@@ -51,10 +76,10 @@ function login(){
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
 
-  // Encode entered values and compare
   if(btoa(user) === encodedUser && btoa(pass) === encodedPass){
     document.getElementById("loginBox").classList.add("hidden");
     document.getElementById("dashboard").classList.remove("hidden");
+    showSection('accounts'); // default landing page
     document.getElementById("error").textContent="";
   } else {
     document.getElementById("error").textContent="Invalid credentials!";
@@ -64,6 +89,11 @@ function login(){
 function logout(){
   document.getElementById("dashboard").classList.add("hidden");
   document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function showSection(id){
+  document.querySelectorAll(".main > div").forEach(sec => sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 </script>
 
