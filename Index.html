@@ -6,7 +6,16 @@
   <title>Secure Portal</title>
   <style>
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f2f4f7;color:#1a1a1a}
-    .topbar{background:#002a5c;height:72px;display:flex;align-items:center;padding:0 28px}
+    .topbar {
+  background: #002a5c;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  width: 100%;
+  box-sizing: border-box; /* ensures full-width padding doesn't break */
+  flex-shrink: 0; /* prevents shrinking on mobile */
+}
     .logo-placeholder{width:180px;height:34px;background:rgba(255,255,255,0.25);border-radius:4px}
     .topbar-user{margin-left:auto;color:#ffffff;font-size:13px}
     .topbar-user a{color:#ffffff;text-decoration:none}
