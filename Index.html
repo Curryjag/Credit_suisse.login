@@ -1,218 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Credit Suisse – Demo Portal</title>
+<title>Credit Suisse – Demo</title>
 <style>
-body{margin:0;font-family:Arial;background:#f4f6f8}
+body{font-family:Arial;background:#f4f6f8;margin:0}
 .hidden{display:none}
-.panel{background:#fff;padding:20px;border-radius:6px;margin-bottom:20px;overflow:visible}
-button{padding:10px 16px;border:none;border-radius:4px;background:#00205b;color:#fff;cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
-input,select{width:100%;padding:8px;margin:6px 0 12px}
-header,footer{background:#00205b;color:#fff;padding:14px 20px}
-nav button{margin-right:10px}
-.balance{font-size:28px;font-weight:bold}
-.muted{color:#666;font-size:13px}
-table{width:100%;border-collapse:collapse}
-td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}
-#investments.panel{min-height:520px}
-canvas{display:block;max-width:100%}
-
-/* modal */
-.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center}
-.modal{background:#fff;padding:24px;border-radius:6px;width:360px}
-.modal h3{margin-top:0}
+.panel{background:#fff;padding:20px;margin:20px;border-radius:6px}
+button{background:#00205b;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer}
+input,select{width:100%;padding:8px;margin:6px 0}
+footer{background:#00205b;color:#fff;padding:14px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.modal{background:#fff;padding:20px;width:360px;border-radius:6px}
 </style>
 </head>
 
 <body>
 
-<header>
-  Credit Suisse Digital Banking
-  <span id="topbarUser" class="hidden" style="float:right">Welcome, Demo Client</span>
-</header>
-
-<!-- LOGIN -->
-<div id="login" class="panel">
+<div id="loginPanel" class="panel">
   <h2>Login</h2>
-  <input id="user" placeholder="User ID">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <input id="user">
+  <input id="pass" type="password">
+  <button onclick="doLogin()">Login</button>
 </div>
 
-<div id="secureAccess" class="panel hidden">
+<div id="otpPanel" class="panel hidden">
   <h2>Security Verification</h2>
-  <p>A one-time code has been sent to your registered mobile number.</p>
-  <input id="otp" placeholder="Phone Code">
+  <input id="otp">
   <button onclick="verifyOTP()">Verify</button>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden" style="padding:20px">
-
-<nav>
-  <button onclick="show('overview')">Overview</button>
-  <button onclick="show('payments')">Payments</button>
-  <button onclick="show('transactions')">Transactions</button>
-</nav>
-
-<!-- OVERVIEW -->
-<div id="overview" class="panel">
-  <h2>Account Overview</h2>
-  <div class="balance">CHF <span id="balance">125,430.55</span></div>
-  <div class="muted">Current balance</div>
-  <button style="margin-top:14px" onclick="show('payments')">Make a Transfer</button>
-</div>
-
-<!-- PAYMENTS -->
-<div id="payments" class="panel hidden">
-  <h2>Payments</h2>
-
-  <div id="step1">
-    <select id="type">
-      <option>SEPA Transfer</option>
-      <option>International Wire</option>
-      <option>Internal Transfer</option>
-      <option>FX Transfer</option>
-    </select>
-    <button onclick="next(2)">Continue</button>
+<div id="dashboard" class="hidden">
+  <div class="panel">
+    <h2>Account Overview</h2>
+    <div>Balance: CHF <span id="balance">125430.55</span></div>
+    <button onclick="showPayments()">Make a Transfer</button>
   </div>
 
-  <div id="step2" class="hidden">
-    <input id="ben" placeholder="Beneficiary Name">
-    <input id="bank" placeholder="Bank Name">
-    <input id="iban" placeholder="IBAN / Account">
+  <div id="payments" class="panel hidden">
+    <h3>Transfer</h3>
+    <input id="ben" placeholder="Beneficiary">
     <input id="amount" type="number" placeholder="Amount">
-    <button onclick="next(3)">Review Transfer</button>
+    <input id="cot" placeholder="COT Code">
+    <button onclick="confirmTransfer()">Confirm</button>
   </div>
 
-  <div id="step3" class="hidden">
-    <label><strong>COT Code</strong></label>
-    <p class="muted">
-      For security reasons, this transaction requires a COT code.<br>
-      Please contact Credit Suisse support to obtain your COT code.
-    </p>
-    <input id="cot">
-    <button id="confirmBtn" onclick="confirmTransfer()">Confirm Transfer</button>
+  <div class="panel">
+    <h3>News</h3>
+    <div id="news"></div>
   </div>
 </div>
 
-<!-- TRANSACTIONS -->
-<div id="transactions" class="panel hidden">
-  <h2>Transactions</h2>
-  <table>
-    <tr><th>Date</th><th>Beneficiary</th><th>Amount</th></tr>
-  </table>
-</div>
+<footer>© Credit Suisse Group AG – Demo</footer>
 
-<!-- NEWS -->
-<div class="panel">
-  <h2>Market News</h2>
-  <div id="news"></div>
-</div>
-
-<!-- INVESTMENTS -->
-<div id="investments" class="panel">
-  <h2>Investments</h2>
-  <canvas id="chart" height="140"></canvas>
-  <p class="muted">Portfolio diversified across equities and bonds.</p>
-</div>
-
-</div>
-
-<footer>
-  © Credit Suisse Group AG – Demo Interface
-</footer>
-
-<!-- MODAL -->
 <div id="modal" class="modal-bg hidden">
   <div class="modal">
     <h3>Transfer Successful</h3>
     <p id="modalText"></p>
     <button onclick="printReceipt()">Print Receipt</button>
-    <button onclick="closeModal()">View Transactions</button>
+    <button onclick="closeModal()">OK</button>
   </div>
 </div>
 
 <script>
-/* encoded secrets */
-const eu=btoa('demoUser'),ep=btoa('demoPass'),elog=btoa('739201'),ecot=btoa('COT-884219');
+const eu=btoa("demoUser");
+const ep=btoa("demoPass");
+const elog=btoa("739201");
+const ecot=btoa("COT-884219");
 
-let triesOTP=0,triesCOT=0,balance=125430.55,lastReceipt={};
+let otpTries=0,cotTries=0,balance=125430.55,lastReceipt={};
 
-/* login */
-function login(){
+const newsItems=[
+"Swiss Market Index rises","UBS expands wealth services","CHF steady vs EUR",
+"European banks gain","Defensive assets favored","Private banking inflows rise"
+];
+let newsIndex=0;
+
+const newsDiv=document.getElementById("news");
+newsDiv.innerText=newsItems[0];
+setInterval(()=>newsDiv.innerText=newsItems[++newsIndex%newsItems.length],8000);
+
+function doLogin(){
   if(btoa(user.value)===eu && btoa(pass.value)===ep){
-    setTimeout(()=>{login.classList.add('hidden');secureAccess.classList.remove('hidden')},800)
-  } else alert('Invalid credentials')
+    setTimeout(()=>{
+      loginPanel.classList.add("hidden");
+      otpPanel.classList.remove("hidden");
+    },700);
+  } else alert("Invalid credentials");
 }
 
 function verifyOTP(){
-  if(++triesOTP>3)return alert('Maximum attempts reached. Contact support.');
+  if(++otpTries>3) return alert("Maximum attempts reached.");
   setTimeout(()=>{
     if(btoa(otp.value)===elog){
-      secureAccess.classList.add('hidden');
-      dashboard.classList.remove('hidden');
-      topbarUser.classList.remove('hidden');
-    } else alert('Invalid code.')
-  },900)
+      otpPanel.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+    } else alert("Invalid code");
+  },700);
 }
 
-/* navigation */
-function show(id){
-  ['overview','payments','transactions'].forEach(s=>document.getElementById(s).classList.add('hidden'))
-  document.getElementById(id).classList.remove('hidden')
-}
-
-/* transfer */
-function next(n){
-  ['step1','step2','step3'].forEach(s=>document.getElementById(s).classList.add('hidden'))
-  document.getElementById('step'+n).classList.remove('hidden')
+function showPayments(){
+  payments.classList.remove("hidden");
 }
 
 function confirmTransfer(){
-  if(++triesCOT>3)return alert('Maximum attempts reached. Contact support.');
-  confirmBtn.disabled=true;confirmBtn.innerText='Processing...';
+  if(++cotTries>3) return alert("Maximum attempts reached.");
+  const amt=parseFloat(amount.value);
+  if(!amt||amt<=0) return alert("Invalid amount");
 
   setTimeout(()=>{
-    if(btoa(cot.value)!==ecot){confirmBtn.disabled=false;confirmBtn.innerText='Confirm Transfer';return alert('Invalid COT')}
-    let amt=parseFloat(amount.value);balance-=amt;
-    document.getElementById('balance').innerText=balance.toFixed(2);
-    let ref='CS-TX-'+Math.floor(Math.random()*999999);
-    document.querySelector('#transactions table').innerHTML+=
-      `<tr><td>${new Date().toLocaleDateString()}</td><td>${ben.value}</td><td>- CHF ${amt.toFixed(2)}</td></tr>`;
-    lastReceipt={ref,amt,ben:ben.value,bank:bank.value,date:new Date().toLocaleString()};
-    modalText.innerHTML=`Your transfer has been completed successfully.<br><br><strong>Reference:</strong> ${ref}`;
-    modal.classList.remove('hidden');
-  },1200)
+    if(btoa(cot.value)!==ecot) return alert("Invalid COT");
+    balance-=amt;
+    document.getElementById("balance").innerText=balance.toFixed(2);
+    lastReceipt={amt,ben:ben.value,ref:"CS-TX-"+Math.floor(Math.random()*999999)};
+    modalText.innerHTML=`Reference: ${lastReceipt.ref}<br>Amount: CHF ${amt.toFixed(2)}`;
+    modal.classList.remove("hidden");
+  },900);
 }
 
-/* modal */
-function closeModal(){modal.classList.add('hidden');show('transactions')}
+function closeModal(){modal.classList.add("hidden")}
 function printReceipt(){
-  let w=window.open('','receipt');
-  w.document.write(`<h2>Credit Suisse Transfer Receipt</h2>
-  <p><strong>Date:</strong> ${lastReceipt.date}</p>
-  <p><strong>Beneficiary:</strong> ${lastReceipt.ben}</p>
-  <p><strong>Bank:</strong> ${lastReceipt.bank}</p>
-  <p><strong>Amount:</strong> CHF ${lastReceipt.amt.toFixed(2)}</p>
-  <p><strong>Reference:</strong> ${lastReceipt.ref}</p>`);
+  const w=window.open();
+  w.document.write(`<h2>Credit Suisse Receipt</h2>
+  <p>${lastReceipt.ref}</p>
+  <p>${lastReceipt.ben}</p>
+  <p>CHF ${lastReceipt.amt.toFixed(2)}</p>`);
   w.print();
 }
-
-/* news */
-const news=[
-"Swiss Market Index rises","Nestlé reports steady growth","UBS expands wealth management",
-"European banks gain","CHF strengthens slightly","Global equities mixed",
-"Energy stocks rebound","Luxury sector stable","Bond yields ease",
-"Pharma stocks advance","Markets await ECB signals","Emerging markets firm",
-"Tech stocks volatile","Commodities steady","Wealth flows increase",
-"Defensive assets favored","Private banking inflows rise","SMI closes higher"
-];
-let i=0;
-setInterval(()=>{newsDiv.innerText=news[i++%news.length]},8000);
-newsDiv.innerText=news[0];
 </script>
+
 </body>
 </html>
