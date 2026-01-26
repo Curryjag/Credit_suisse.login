@@ -554,6 +554,44 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
     }
     currentIndex = (currentIndex + 1) % headlines.length;
   }
+  // Step navigation
+let transferStep = 1;
+
+function nextTransferStep() {
+  if (transferStep === 1) {
+    const type = document.getElementById('transferType').value;
+    if (!type) {
+      alert("Please select a transfer type.");
+      return;
+    }
+    document.getElementById('transferStep1').classList.add('hidden');
+    document.getElementById('transferStep2').classList.remove('hidden');
+    transferStep = 2;
+  } else if (transferStep === 2) {
+    // You can add validation here if needed
+    document.getElementById('transferStep2').classList.add('hidden');
+    document.getElementById('transferStep3').classList.remove('hidden');
+    transferStep = 3;
+  }
+}
+
+// Hardcoded COT code
+const encodedCOT = btoa("COT-884219");
+
+function finalizeTransfer() {
+  const inputCOT = document.getElementById('cotCode').value;
+  if (btoa(inputCOT) === encodedCOT) {
+    alert("Transfer Successful!"); // You can later replace with modal + append transaction
+    // Reset wizard
+    document.getElementById('transferStep3').classList.add('hidden');
+    document.getElementById('transferStep1').classList.remove('hidden');
+    transferStep = 1;
+    document.getElementById('payments').classList.add('hidden');
+    showSection('overview');
+  } else {
+    showTempError('cotError');
+  }
+}
 </script>
 </body>
 </html>
