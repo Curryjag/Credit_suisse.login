@@ -193,7 +193,17 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
   /* PANEL SCROLLING FOR TABLES/CHARTS */
   .panel { overflow-x:auto; }
-}
+ }
+  .content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+   }
+   .overview-panel {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+   }
 </style>
 </head>
 <body>
@@ -280,7 +290,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
         <a href="#" onclick="logout()">Log out</a>
       </div>
 
-      <div id="overview" class="panel">
+      <div id="overview" class="panel overview-panel">
   <h2>Account overview</h2>
 
   <div class="muted" style="margin-bottom:10px;">
