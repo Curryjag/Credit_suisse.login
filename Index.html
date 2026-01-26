@@ -101,11 +101,11 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 .hidden { display:none; }
 
 /* DASHBOARD WRAPPER */
-.dash-wrapper {
+.dash-wrapper{
   display:flex;
-  flex-direction:row;
   min-height:calc(100vh - 72px);
   width:100%;
+  overflow-x: hidden; /* prevent page horizontal scroll */
 }
 
 /* SIDEBAR */
@@ -147,6 +147,17 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   width:100%;
   overflow-x:auto; /* horizontal scroll if content is too wide */
   box-sizing:border-box;
+}
+
+#investments{
+  min-width:500px;       /* make card wider */
+  overflow-x:auto;       /* horizontal scroll if content exceeds */
+}
+
+#investments table,
+#investments canvas{
+  max-width:100%;        /* prevent child elements from overflowing */
+  display:block;
 }
 
 .balance { font-size:26px;font-weight:300;color:#002a5c;margin-bottom:10px; }
