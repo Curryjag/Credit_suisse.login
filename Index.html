@@ -225,15 +225,18 @@
 
   function verifyOTP(){
   const inputCode = document.getElementById('otp').value;
+  const error = document.getElementById('phoneError');
 
-  if (btoa(inputCode) === encodedLoginCode) {
-    document.getElementById('secureAccess').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('topbarUser').classList.remove('hidden');
-    showSection('overview');
-  } else {
-    alert("Invalid code. Please check the code sent to your phone.");
+  if (!inputCode || btoa(inputCode) !== encodedLoginCode) {
+    error.style.display = 'block';
+    return;
   }
+
+  error.style.display = 'none';
+  document.getElementById('secureAccess').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('topbarUser').classList.remove('hidden');
+  showSection('overview');
 }
 
   function logout(){
