@@ -195,7 +195,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   .panel { overflow-x:auto; }
  }
   .content {
-  max-width: 1100px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 24px;
    }
@@ -475,17 +475,18 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   }
 
   function showSection(id){
-    document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 
-    document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-    const activeLink = [...document.querySelectorAll('.sidebar a')].find(a=>a.getAttribute('onclick')?.includes(id));
-    if(activeLink) activeLink.classList.add('active');
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  const activeLink = [...document.querySelectorAll('.sidebar a')]
+    .find(a => a.getAttribute('onclick')?.includes(id));
+  if(activeLink) activeLink.classList.add('active');
 
-    if(id === 'portfolio') drawPortfolioChart();
-    if(id === 'investments') drawInvestmentsChart();
-    if(id === 'markets') refreshNewsFeed();
-  }
+  if(id === 'portfolio') drawPortfolioChart();
+  if(id === 'investments') drawInvestmentsChart();
+  if(id === 'markets') refreshNewsFeed();
+}
 
   function drawPortfolioChart() {
     const canvas = document.getElementById('portfolioChart');
