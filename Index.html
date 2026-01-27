@@ -205,27 +205,28 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   flex-direction: column;
    }
    
-   /* OVERVIEW CARD WIDTH CONTROL */
-#overview {
-  min-height: 100px;       /* keep card tall enough */
-  display: flex;           /* flex for vertical stacking */
-  flex-direction: column;
-  padding: 24px;
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-  max-width: 340px;        /* limit card width */
-  width: 100%;             /* responsive */
-  margin: 0 auto;          /* center horizontally */
+   #overview {
+  min-height: 260px;                 
+  display: flex;                     
+  flex-direction: column;            
+  padding: 32px 24px 24px 24px;      /* extra top padding for breathing space */
+  background: #fff;                  
+  border-radius: 8px;                /* slightly rounder corners */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08); /* slightly deeper shadow */
+  max-width: 420px;                  
+  width: 100%;                       
+  margin: 48px auto 0 auto;          /* more space from top header */
+  border: 1px solid #e5e7eb;        
 }
 
-/* BUTTON AT THE BOTTOM */
-#overview button {
-  margin-top: auto;        /* push button to bottom */
+/* Make main content take available vertical space */
+#overview .overview-content {
+  flex: 1;                            
+  display: flex;
+  flex-direction: column;             
 }
 
-/* Balance text styling */
+/* Balance styling */
 #overview .balance {
   font-size: 26px;
   font-weight: 300;
@@ -238,9 +239,13 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   color: #6b7280;
 }
 
-#overview .muted {
-  font-size: 13px;
-  color: #6b7280;
+/* Button pinned to bottom */
+#overview button {
+  margin-top: auto;
+  padding: 12px 16px;                /* slightly bigger click area */
+  border-radius: 6px;                
+  font-weight: 600;
+  font-size: 15px;
 }
 </style>
 </head>
