@@ -206,27 +206,25 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
    }
    
    #overview {
-  min-height: 260px;                 
-  display: flex;                     
-  flex-direction: column;            
-  padding: 32px 24px 24px 24px;      /* extra top padding for breathing space */
-  background: #fff;                  
-  border-radius: 8px;                /* slightly rounder corners */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08); /* slightly deeper shadow */
-  max-width: 340px;                  
-  width: 100%;                       
-  margin: 16px auto 0 auto;          /* more space from top header */
-  border: 1px solid #e5e7eb;        
-}
-
-/* Make main content take available vertical space */
-#overview .overview-content {
-  flex: 1;                            
+  min-height: 260px;
   display: flex;
-  flex-direction: column;             
+  flex-direction: column;
+  padding: 32px 24px 24px 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  max-width: 340px;       /* controls width */
+  width: 100%;
+  margin-top: 16px;       /* spacing from top header */
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Balance styling */
+#overview:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
 #overview .balance {
   font-size: 26px;
   font-weight: 300;
@@ -239,33 +237,19 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   color: #6b7280;
 }
 
-/* Button pinned to bottom */
 #overview button {
   margin-top: auto;
-  padding: 12px 16px;                /* slightly bigger click area */
-  border-radius: 6px;                
+  padding: 12px 16px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 15px;
-}
-   /* Button Hover Effect */
-#overview button {
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 #overview button:hover {
-  background: #002e73;           /* slightly darker blue on hover */
-  transform: translateY(-2px);   /* tiny lift effect */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12); /* subtle shadow */
-}
-
-   /* Hover Lift Effect */
-#overview {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-#overview:hover {
-  transform: translateY(-4px); /* slightly lifts card */
-  box-shadow: 0 12px 32px rgba(0,0,0,0.12); /* deeper shadow on hover */
+  background: #002e73;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 </style>
 </head>
