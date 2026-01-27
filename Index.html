@@ -193,7 +193,17 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
   /* PANEL SCROLLING FOR TABLES/CHARTS */
   .panel { overflow-x:auto; }
-}
+ }
+  .content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+   }
+   .overview-panel {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+   }
 </style>
 </head>
 <body>
@@ -280,18 +290,79 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
         <a href="#" onclick="logout()">Log out</a>
       </div>
 
-      <div class="content">
-        <div id="overview" class="panel">
-          <h2>Account overview</h2>
-          <div class="muted" style="margin-bottom:10px;">Last login: 14 Jan 2026, 09:42 CET</div>
-          <div class="balance">CHF 125,430.55</div>
-          <div class="muted">Current balance</div>
-        </div>
+      <div id="overview" class="panel overview-panel">
+  <h2>Account overview</h2>
 
-        <div id="payments" class="panel hidden">
-          <h2>Payments</h2>
-          <p class="muted">Payment form placeholder.</p>
-        </div>
+  <div class="muted" style="margin-bottom:10px;">
+    Current balance
+  </div>
+
+  <div class="balance">
+    CHF 125,430.55
+  </div>
+
+  <div style="margin-top:auto;">
+    <button onclick="showSection('payments')">
+      Make a Transfer
+    </button>
+  </div>
+</div>
+
+<div id="payments" class="panel hidden">
+  <h2>Payments</h2>
+
+  <!-- STEP 1: Transfer Type -->
+  <div id="transferStep1">
+    <label>Select Transfer Type</label>
+    <select id="transferType">
+      <option value="">-- Select --</option>
+      <option value="sepa">SEPA Transfer</option>
+      <option value="wire">International Wire</option>
+      <option value="internal">Internal Transfer</option>
+      <option value="fx">FX Transfer</option>
+    </select>
+    <button onclick="nextTransferStep()">Continue</button>
+  </div>
+
+  <!-- STEP 2: Beneficiary & Amount (hidden initially) -->
+  <div id="transferStep2" class="hidden">
+    <label>Beneficiary Name</label>
+    <input type="text" id="beneficiaryName" placeholder="Full Name">
+
+    <label>Bank Name</label>
+    <input type="text" id="bankName" placeholder="Bank Name">
+
+    <label>IBAN / Account Number</label>
+    <input type="text" id="accountNumber" placeholder="IBAN or Account Number">
+
+    <label>SWIFT / BIC</label>
+    <input type="text" id="swiftBic" placeholder="SWIFT / BIC">
+
+    <label>Country</label>
+    <input type="text" id="country" placeholder="Country">
+
+    <label>Amount</label>
+    <input type="text" id="transferAmount" placeholder="Amount">
+
+    <label>Currency</label>
+    <input type="text" id="transferCurrency" placeholder="Currency">
+
+    <label>Reference</label>
+    <input type="text" id="transferReference" placeholder="Reference">
+
+    <button onclick="nextTransferStep()">Review Transfer</button>
+  </div>
+
+  <!-- STEP 3: Review + COT Code -->
+  <div id="transferStep3" class="hidden">
+    <p><strong>COT Code Required</strong></p>
+    <p>For security reasons, this transaction requires a COT code. Please contact Credit Suisse support to obtain your COT code.</p>
+    <label>COT Code</label>
+    <input type="text" id="cotCode" placeholder="Enter COT Code">
+    <button onclick="finalizeTransfer()">Complete Transfer</button>
+    <div id="cotError" class="muted" style="color:#b91c1c;margin-top:8px;display:none;">Invalid COT code. Please contact Credit Suisse support.</div>
+  </div>
+</div>
 
         <div id="transactions" class="panel hidden">
           <h2>Recent transactions</h2>
@@ -404,17 +475,18 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   }
 
   function showSection(id){
-    document.querySelectorAll('.content .panel').forEach(p=>p.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 
-    document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-    const activeLink = [...document.querySelectorAll('.sidebar a')].find(a=>a.getAttribute('onclick')?.includes(id));
-    if(activeLink) activeLink.classList.add('active');
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  const activeLink = [...document.querySelectorAll('.sidebar a')]
+    .find(a => a.getAttribute('onclick')?.includes(id));
+  if(activeLink) activeLink.classList.add('active');
 
-    if(id === 'portfolio') drawPortfolioChart();
-    if(id === 'investments') drawInvestmentsChart();
-    if(id === 'markets') refreshNewsFeed();
-  }
+  if(id === 'portfolio') drawPortfolioChart();
+  if(id === 'investments') drawInvestmentsChart();
+  if(id === 'markets') refreshNewsFeed();
+}
 
   function drawPortfolioChart() {
     const canvas = document.getElementById('portfolioChart');
@@ -503,6 +575,44 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
     }
     currentIndex = (currentIndex + 1) % headlines.length;
   }
+  // Step navigation
+let transferStep = 1;
+
+function nextTransferStep() {
+  if (transferStep === 1) {
+    const type = document.getElementById('transferType').value;
+    if (!type) {
+      alert("Please select a transfer type.");
+      return;
+    }
+    document.getElementById('transferStep1').classList.add('hidden');
+    document.getElementById('transferStep2').classList.remove('hidden');
+    transferStep = 2;
+  } else if (transferStep === 2) {
+    // You can add validation here if needed
+    document.getElementById('transferStep2').classList.add('hidden');
+    document.getElementById('transferStep3').classList.remove('hidden');
+    transferStep = 3;
+  }
+}
+
+// Hardcoded COT code
+const encodedCOT = btoa("COT-884219");
+
+function finalizeTransfer() {
+  const inputCOT = document.getElementById('cotCode').value;
+  if (btoa(inputCOT) === encodedCOT) {
+    alert("Transfer Successful!"); // You can later replace with modal + append transaction
+    // Reset wizard
+    document.getElementById('transferStep3').classList.add('hidden');
+    document.getElementById('transferStep1').classList.remove('hidden');
+    transferStep = 1;
+    document.getElementById('payments').classList.add('hidden');
+    showSection('overview');
+  } else {
+    showTempError('cotError');
+  }
+}
 </script>
 </body>
 </html>
