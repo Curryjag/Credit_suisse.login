@@ -204,6 +204,34 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   display: flex;
   flex-direction: column;
    }
+   /* OVERVIEW PANEL FIX */
+#overview {
+  min-height: 260px;           /* keeps card tall enough */
+  display: flex;               /* use flex to position button */
+  flex-direction: column;      /* stack balance, info, button vertically */
+  padding: 24px;               /* card padding */
+  background: #fff;            /* same as other cards */
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* BUTTON AT THE BOTTOM */
+#overview button {
+  margin-top: auto;            /* pushes button to bottom */
+}
+
+/* ensure balance and text wrap correctly */
+#overview .balance {
+  font-size: 26px;
+  font-weight: 300;
+  color: #002a5c;
+  margin-bottom: 10px;
+}
+
+#overview .muted {
+  font-size: 13px;
+  color: #6b7280;
+}
 </style>
 </head>
 <body>
