@@ -195,10 +195,14 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   .panel { overflow-x:auto; }
  }
   .content {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
-   }
+  flex: 1;              /* take remaining space in dash-wrapper */
+  padding: 32px;        /* original padding */
+  background: #f5f7fa;  
+  min-width: 0;         /* allows flex children to shrink properly */
+  display: flex;        /* vertical stacking control */
+  flex-direction: column;
+  gap: 24px;            /* space between panels */
+}
    .overview-panel {
   min-height: 260px;
   display: flex;
