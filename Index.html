@@ -213,7 +213,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   background: #fff;                  
   border-radius: 8px;                /* slightly rounder corners */
   box-shadow: 0 8px 24px rgba(0,0,0,0.08); /* slightly deeper shadow */
-  max-width: 420px;                  
+  max-width: 340px;                  
   width: 100%;                       
   margin: 48px auto 0 auto;          /* more space from top header */
   border: 1px solid #e5e7eb;        
@@ -246,6 +246,26 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   border-radius: 6px;                
   font-weight: 600;
   font-size: 15px;
+}
+   /* Button Hover Effect */
+#overview button {
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#overview button:hover {
+  background: #002e73;           /* slightly darker blue on hover */
+  transform: translateY(-2px);   /* tiny lift effect */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12); /* subtle shadow */
+}
+
+   /* Hover Lift Effect */
+#overview {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#overview:hover {
+  transform: translateY(-4px); /* slightly lifts card */
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12); /* deeper shadow on hover */
 }
 </style>
 </head>
