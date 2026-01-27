@@ -194,15 +194,66 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   /* PANEL SCROLLING FOR TABLES/CHARTS */
   .panel { overflow-x:auto; }
  }
-  .content {
-  flex: 1;              /* take remaining space in dash-wrapper */
-  padding: 32px;        /* original padding */
-  background: #f5f7fa;  
-  min-width: 0;         /* allows flex children to shrink properly */
-  display: flex;        /* vertical stacking control */
-  flex-direction: column;
-  gap: 24px;            /* space between panels */
+  /* DASHBOARD CONTENT */
+.content {
+  flex: 1;               /* take remaining space in dash-wrapper */
+  padding: 32px;         /* original padding */
+  background: #f5f7fa;
+  min-width: 0;          /* allows flex children to shrink properly */
+  display: flex;
+  flex-direction: column; 
+  gap: 24px;             /* vertical space between cards */
 }
+
+/* CARDS / PANELS */
+.panel {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 24px;
+  width: 100%;           
+  box-sizing: border-box;
+  flex-shrink: 0;        /* prevent collapsing */
+  overflow-x: auto;      /* scroll if content exceeds width */
+}
+
+/* INVESTMENTS CARD SCROLL ONLY */
+#investments {
+  min-width: 300px;      /* allow table/chart to expand */
+  overflow-x: auto;      /* scroll if content exceeds width */
+}
+
+/* OVERVIEW CARD BUTTON ALIGNMENT */
+.overview-panel {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-panel button {
+  margin-top: auto;      /* button stays at the bottom */
+}
+
+/* RESPONSIVE MOBILE */
+@media(max-width:900px){
+  .main { grid-template-columns:1fr; gap:32px; }
+  .hero h1 { font-size:26px; }
+  .dash-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+  .sidebar a {
+    white-space: nowrap;
+    margin-right: 8px;
+  }
+  .panel {
+    overflow-x: auto;
+  }
    .overview-panel {
   min-height: 260px;
   display: flex;
