@@ -267,6 +267,11 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   transform: translateY(-4px); /* slightly lifts card */
   box-shadow: 0 12px 32px rgba(0,0,0,0.12); /* deeper shadow on hover */
 }
+
+ .flex { 
+  display: flex; 
+  flex-direction: column; 
+ }
 </style>
 </head>
 <body>
@@ -538,11 +543,18 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   }
 
   function showSection(id) {
-  // Hide all panels first
-  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  // Hide all panels
+  document.querySelectorAll('.panel').forEach(p => {
+    p.classList.add('hidden');
+    p.classList.remove('flex'); // remove flex when hidden
+  });
 
-  // Show the selected panel
-  document.getElementById(id).classList.remove('hidden');
+  // Show selected panel
+  const panel = document.getElementById(id);
+  if (panel) {
+    panel.classList.remove('hidden');
+    panel.classList.add('flex'); // add flex when visible
+  }
 
   // Update sidebar active link
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
@@ -550,13 +562,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
     .find(a => a.getAttribute('onclick')?.includes(id));
   if (activeLink) activeLink.classList.add('active');
 
-  // Special logic for Overview
-  if (id !== 'overview') {
-    // Always hide overview if any other panel is clicked
-    document.getElementById('overview').classList.add('hidden');
-  }
-
-  // Optional: call chart/news functions for certain panels
+  // Optional: call chart/news functions
   if (id === 'portfolio') drawPortfolioChart();
   if (id === 'investments') drawInvestmentsChart();
   if (id === 'markets') refreshNewsFeed();
