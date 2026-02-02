@@ -537,18 +537,34 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
     document.getElementById('topbarUser').classList.add('hidden');
   }
 
-  function showSection(id){
-  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+  function showSection(id) {
+  // Hide ALL panels (overview included)
+  document.querySelectorAll('.panel').forEach(panel => {
+    panel.classList.add('hidden');
+  });
 
-  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  // Show ONLY the requested panel
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.remove('hidden');
+  }
+
+  // Sidebar active state
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.classList.remove('active');
+  });
+
   const activeLink = [...document.querySelectorAll('.sidebar a')]
     .find(a => a.getAttribute('onclick')?.includes(id));
-  if(activeLink) activeLink.classList.add('active');
 
-  if(id === 'portfolio') drawPortfolioChart();
-  if(id === 'investments') drawInvestmentsChart();
-  if(id === 'markets') refreshNewsFeed();
+  if (activeLink) {
+    activeLink.classList.add('active');
+  }
+
+  // Section-specific hooks
+  if (id === 'portfolio') drawPortfolioChart();
+  if (id === 'investments') drawInvestmentsChart();
+  if (id === 'markets') refreshNewsFeed();
 }
 
   function drawPortfolioChart() {
