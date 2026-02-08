@@ -763,7 +763,17 @@ function finalizeTransfer() {
   resetTransfer();
   showSection('overview');
  }
-}
+  function resetTransfer() {
+  transferStep = 1;
+
+  document.getElementById('transferStep1').classList.remove('hidden');
+  document.getElementById('transferStep2').classList.add('hidden');
+  document.getElementById('transferStep3').classList.add('hidden');
+
+  document.querySelectorAll('#payments input, #payments select')
+    .forEach(el => el.value = '');
+   }
+  }
 </script>
 </body>
 </html>
