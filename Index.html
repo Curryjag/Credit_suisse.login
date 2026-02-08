@@ -347,6 +347,11 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
     <div class="dash-wrapper">
+      <div id="transferBanner" 
+     style="position:fixed;top:72px;left:50%;transform:translateX(-50%);padding:12px 20px;
+            border-radius:6px;font-weight:600;font-size:14px;color:#fff;
+            display:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:999;">
+      </div>
       <div class="sidebar">
         <a href="#" onclick="showSection('overview')">Account overview</a>
         <a href="#" onclick="showSection('payments')">Payments</a>
@@ -671,26 +676,25 @@ function verifyOTP(){
 let transferStep = 1;
 
 function showTransferMessage(text, type = 'error', duration = 3000) {
-  const box = document.getElementById('transferMessage');
-  if (!box) return;
+  const banner = document.getElementById('transferBanner');
+  if (!banner) return;
 
-  // Reset & show message
-  box.classList.remove('hidden');
-  box.textContent = text;
+  banner.textContent = text;
+  banner.style.display = 'block';
 
   if (type === 'error') {
-    box.style.background = '#fee2e2';
-    box.style.color = '#991b1b';
+    banner.style.background = '#b91c1c';  // dark red
   } else {
-    box.style.background = '#d1fae5'; // nicer green
-    box.style.color = '#065f46';
+    banner.style.background = '#16a34a';  // green
   }
 
+  // Clear any previous timeout
+  clearTimeout(banner._timeout);
+
   // Auto-hide after duration
-  clearTimeout(box._timeout);
-  box._timeout = setTimeout(() => {
-    box.classList.add('hidden');
-    box.textContent = '';
+  banner._timeout = setTimeout(() => {
+    banner.style.display = 'none';
+    banner.textContent = '';
   }, duration);
 }
 
@@ -762,7 +766,7 @@ const encodedCOT = btoa("COT-884219");
 function finalizeTransfer() {
   const inputCOT = document.getElementById('cotCode').value;
   if (btoa(inputCOT) !== encodedCOT) {
-    showTempError('cotError');
+    showTransferMessage("Invalid COT code.", "error");
     return;
   }
 
@@ -772,11 +776,11 @@ function finalizeTransfer() {
   const beneficiary = beneficiaryInput.value.trim();
 
   if (!amount || amount <= 0 || !beneficiary) {
-    showTransferMessage("Please fill all required fields.");
+    showTransferMessage("Please fill all required fields.", "error");
     return;
   }
   if (amount > accountBalance) {
-    showTransferMessage("Insufficient balance.");
+    showTransferMessage("Insufficient balance.", "error");
     return;
   }
 
@@ -799,12 +803,17 @@ function finalizeTransfer() {
       <td>- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
     `;
 
-    showTransferMessage("Transfer completed successfully.", "success");
-    resetTransfer();
-    showSection('overview');
+    // Show success message banner
+    showTransferMessage("Transfer completed successfully.", "success", 2500);
 
-    btn.textContent = 'Complete Transfer';
-    btn.disabled = false;
+    // After message disappears, reset transfer and go to overview
+    setTimeout(() => {
+      resetTransfer();
+      showSection('overview');
+      btn.textContent = 'Complete Transfer';
+      btn.disabled = false;
+    }, 2500);
+
   }, 1500); // fake latency
 }
   function resetTransfer() {
