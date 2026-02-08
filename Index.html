@@ -376,6 +376,10 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
 <div id="payments" class="panel hidden">
   <h2>Payments</h2>
+  <div id="transferMessage"
+     class="muted hidden"
+     style="margin-bottom:14px;padding:10px;border-radius:4px;font-size:14px;">
+  </div>
 
   <!-- STEP 1: Transfer Type -->
   <div id="transferStep1">
@@ -666,11 +670,27 @@ function verifyOTP(){
   // Step navigation
 let transferStep = 1;
 
+function showTransferMessage(text, type = 'error') {
+  const box = document.getElementById('transferMessage');
+  if (!box) return;
+
+  box.textContent = text;
+  box.classList.remove('hidden');
+
+  if (type === 'error') {
+    box.style.background = '#fee2e2';
+    box.style.color = '#991b1b';
+  } else {
+    box.style.background = '#ecfdf5';
+    box.style.color = '#065f46';
+  }
+}
+
 function nextTransferStep() {
   if (transferStep === 1) {
     const type = document.getElementById('transferType').value;
     if (!type) {
-      alert("Please select a transfer type.");
+      showTransferMessage("Please select a transfer type.");
       return;
     }
     document.getElementById('transferStep1').classList.add('hidden');
@@ -690,19 +710,19 @@ function nextTransferStep() {
   for (let id of requiredFields) {
     const el = document.getElementById(id);
     if (!el.value.trim()) {
-      alert('Please fill all required fields.');
+      showTransferMessage("Please fill all required fields.");
       return;
     }
   }
 
   const amount = parseFloat(document.getElementById('transferAmount').value);
   if (isNaN(amount) || amount <= 0) {
-    alert('Enter a valid transfer amount.');
+    showTransferMessage("Enter a valid transfer amount.");
     return;
   }
 
   if (amount > accountBalance) {
-    alert('Insufficient balance.');
+    showTransferMessage("Insufficient balance.");
     return;
   }
 
@@ -729,12 +749,12 @@ function finalizeTransfer() {
   const beneficiary = beneficiaryInput.value.trim();
 
   if (!amount || amount <= 0 || !beneficiary) {
-    alert('Please fill all required transfer fields');
+    showTransferMessage("Please fill all required fields.");
     return;
   }
 
   if (amount > accountBalance) {
-    alert('Insufficient balance');
+    showTransferMessage("Insufficient balance.");
     return;
   }
 
@@ -758,7 +778,7 @@ function finalizeTransfer() {
     <td>- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
   `;
 
-  alert('Transfer successful.');
+  showTransferMessage('Transfer successful.');
 
   resetTransfer();
   showSection('overview');
