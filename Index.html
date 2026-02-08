@@ -456,7 +456,7 @@ button:focus-visible {
           <label for="pass">Password</label>
           <input id="pass" type="password" />
 
-          <button type="submit">Log in</button>
+          <button id="loginBtn" type="submit">Log in</button>
 
           <div class="links">
             <a href="#">Forgot password?</a>
@@ -488,7 +488,7 @@ button:focus-visible {
         <label>Verification code</label>
         <input type="text" id="otp" placeholder="6-digit code">
 
-        <button onclick="verifyOTP()">Verify</button>
+        <button id="verifyBtn" onclick="verifyOTP()">Verify</button>
 
         <div id="phoneError" class="muted" style="color:#b91c1c;margin-top:12px;display:none;">
   Invalid code. Please check the code sent to your phone.
@@ -672,7 +672,7 @@ button:focus-visible {
 function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
-  const btn = document.querySelector('#loginPage button[type="submit"]');
+  const btn = document.getElementById('loginBtn'); // use ID
 
   btn.textContent = 'Verifying...';
   btn.disabled = true;
@@ -685,7 +685,6 @@ function login() {
     } else {
       showTempError('loginError');
     }
-
     btn.textContent = 'Log in';
     btn.disabled = false;
   }, 1200); // simulate processing delay
@@ -703,8 +702,7 @@ function updateBalanceDisplay() {
 function verifyOTP() {
   const inputCode = document.getElementById('otp').value;
   const error = document.getElementById('phoneError');
-  const btn = document.querySelector('#secureAccess button');
-
+  const btn = document.getElementById('verifyBtn'); // <-- use new ID
   btn.textContent = 'Verifying...';
   btn.disabled = true;
 
@@ -715,12 +713,10 @@ function verifyOTP() {
       btn.disabled = false;
       return;
     }
-
     error.style.display = 'none';
     document.getElementById('secureAccess').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     document.getElementById('topbarUser').classList.remove('hidden');
-
     updateBalanceDisplay();
     showSection('overview');
 
