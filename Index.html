@@ -138,7 +138,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   min-width:0; /* allows child panels to shrink correctly */
 }
 
-/* PANEL CONTAINER: fade + scale from center with gentle easing */
+/* PANEL CONTAINER: fade + scale from center, slower for premium feel */
 .panel {
   background: #fff;
   border-radius: 6px;
@@ -151,9 +151,9 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
   /* fade + scale from center */
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.4s cubic-bezier(0.2,0,0,1), 
-              transform 0.4s cubic-bezier(0.2,0,0,1);
+  transform: scale(0.92);
+  transition: opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), 
+              transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
 }
 
 .panel.show {
@@ -161,12 +161,12 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   transform: scale(1);
 }
 
-/* CHILD ELEMENTS: subtle pop-in */
+/* CHILD ELEMENTS: subtle pop-in with slower stagger */
 .panel > * {
   opacity: 0;
-  transform: scale(0.97);
-  transition: opacity 0.45s cubic-bezier(0.2,0,0,1), 
-              transform 0.45s cubic-bezier(0.2,0,0,1);
+  transform: scale(0.95);
+  transition: opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), 
+              transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
 }
 
 .panel.show > * {
@@ -174,17 +174,17 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   transform: scale(1);
 }
 
-/* Stagger delays for elegant entrance */
-.panel.show > *:nth-child(1) { transition-delay: 0.05s; }
-.panel.show > *:nth-child(2) { transition-delay: 0.10s; }
-.panel.show > *:nth-child(3) { transition-delay: 0.15s; }
-.panel.show > *:nth-child(4) { transition-delay: 0.20s; }
-.panel.show > *:nth-child(5) { transition-delay: 0.25s; }
-.panel.show > *:nth-child(6) { transition-delay: 0.30s; }
-.panel.show > *:nth-child(7) { transition-delay: 0.35s; }
-.panel.show > *:nth-child(8) { transition-delay: 0.40s; }
-.panel.show > *:nth-child(9) { transition-delay: 0.45s; }
-.panel.show > *:nth-child(10){ transition-delay: 0.50s; }
+/* Stagger delays for elegant entrance (slightly longer) */
+.panel.show > *:nth-child(1) { transition-delay: 0.1s; }
+.panel.show > *:nth-child(2) { transition-delay: 0.18s; }
+.panel.show > *:nth-child(3) { transition-delay: 0.26s; }
+.panel.show > *:nth-child(4) { transition-delay: 0.34s; }
+.panel.show > *:nth-child(5) { transition-delay: 0.42s; }
+.panel.show > *:nth-child(6) { transition-delay: 0.50s; }
+.panel.show > *:nth-child(7) { transition-delay: 0.58s; }
+.panel.show > *:nth-child(8) { transition-delay: 0.66s; }
+.panel.show > *:nth-child(9) { transition-delay: 0.74s; }
+.panel.show > *:nth-child(10){ transition-delay: 0.82s; }
    
 .hidden {
   display: none !important;
