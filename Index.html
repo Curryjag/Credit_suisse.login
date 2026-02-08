@@ -670,12 +670,13 @@ function verifyOTP(){
   // Step navigation
 let transferStep = 1;
 
-function showTransferMessage(text, type = 'error') {
+function showTransferMessage(text, type = 'error', duration = 3000) {
   const box = document.getElementById('transferMessage');
   if (!box) return;
 
-  box.textContent = text;
+  // Reset styles every time
   box.classList.remove('hidden');
+  box.textContent = text;
 
   if (type === 'error') {
     box.style.background = '#fee2e2';
@@ -684,6 +685,13 @@ function showTransferMessage(text, type = 'error') {
     box.style.background = '#ecfdf5';
     box.style.color = '#065f46';
   }
+
+  // Auto-hide after duration
+  clearTimeout(box._timeout);
+  box._timeout = setTimeout(() => {
+    box.classList.add('hidden');
+    box.textContent = '';
+  }, duration);
 }
 
 function nextTransferStep() {
