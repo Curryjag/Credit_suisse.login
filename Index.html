@@ -691,26 +691,24 @@ function verifyOTP(){
   // Step navigation
 let transferStep = 1;
 
-function showTransferMessage(text, type = 'error', duration = 3000) {
+function showTransferMessage(text, type='error', duration=3000) {
   const banner = document.getElementById('transferBanner');
   if (!banner) return;
 
   banner.textContent = text;
+  banner.style.background = type === 'error' ? '#b91c1c' : '#065f46';
   banner.style.display = 'block';
+  banner.style.opacity = 0;
+  
+  // Fade in
+  setTimeout(() => banner.style.transition = 'opacity 0.35s ease', 10);
+  setTimeout(() => banner.style.opacity = 1, 20);
 
-  if (type === 'error') {
-    banner.style.background = '#b91c1c';  // dark red
-  } else {
-    banner.style.background = '#16a34a';  // green
-  }
-
-  // Clear any previous timeout
+  // Auto-hide
   clearTimeout(banner._timeout);
-
-  // Auto-hide after duration
   banner._timeout = setTimeout(() => {
-    banner.style.display = 'none';
-    banner.textContent = '';
+    banner.style.opacity = 0;
+    setTimeout(() => banner.style.display = 'none', 350);
   }, duration);
 }
 
