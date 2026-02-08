@@ -148,162 +148,133 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   width: 100%;
   overflow-x: auto;
   box-sizing: border-box;
-
-  /* Initial state */
   opacity: 0;
-  transform: scale(0.975);
-
-  transition:
-    opacity 0.85s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: scale(0.96);
+  transition: opacity 0.72s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.72s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-/* ---- Show Panel ---- */
 .panel.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* ---- Children of Panels ---- */
 .panel > * {
   opacity: 0;
-  transform: scale(0.985);
-
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: translateY(0) scale(0.97);
+  transition: opacity 0.58s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.58s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-/* ---- Show Children ---- */
 .panel.show > * {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
 }
 
-/* ---- Stagger for all panel children (slower & elegant) ---- */
-.panel.show > *:nth-child(1)  { transition-delay: 0.15s; }
-.panel.show > *:nth-child(2)  { transition-delay: 0.30s; }
-.panel.show > *:nth-child(3)  { transition-delay: 0.45s; }
-.panel.show > *:nth-child(4)  { transition-delay: 0.60s; }
-.panel.show > *:nth-child(5)  { transition-delay: 0.75s; }
-.panel.show > *:nth-child(6)  { transition-delay: 0.90s; }
-.panel.show > *:nth-child(7)  { transition-delay: 1.05s; }
-.panel.show > *:nth-child(8)  { transition-delay: 1.20s; }
-.panel.show > *:nth-child(9)  { transition-delay: 1.35s; }
-.panel.show > *:nth-child(10) { transition-delay: 1.50s; }
+/* Staggered children */
+.panel.show > *:nth-child(1) { transition-delay: 0.08s; }
+.panel.show > *:nth-child(2) { transition-delay: 0.16s; }
+.panel.show > *:nth-child(3) { transition-delay: 0.24s; }
+.panel.show > *:nth-child(4) { transition-delay: 0.32s; }
+.panel.show > *:nth-child(5) { transition-delay: 0.40s; }
+.panel.show > *:nth-child(6) { transition-delay: 0.48s; }
+.panel.show > *:nth-child(7) { transition-delay: 0.56s; }
+.panel.show > *:nth-child(8) { transition-delay: 0.64s; }
+.panel.show > *:nth-child(9) { transition-delay: 0.72s; }
+.panel.show > *:nth-child(10){ transition-delay: 0.80s; }
 
-/* ---- Specific Large Panels (Payments, Transactions, Investments) ---- */
-#payments,
-#transactions,
-#investments {
-  opacity: 0;
-  transform: scale(0.965);
-
-  transition:
-    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+/* Specific Large Panels */
+#payments, #transactions, #investments {
+  transform: scale(0.94);
+  transition: opacity 0.72s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.72s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-#payments.show,
-#transactions.show,
-#investments.show {
+#payments.show, #transactions.show, #investments.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* ---- Children inside large panels ---- */
-#payments > *,
-#transactions > *,
-#investments > * {
+#payments > *, #transactions > *, #investments > * {
   opacity: 0;
-  transform: scale(0.985);
-
-  transition:
-    opacity 0.75s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: translateY(0) scale(0.97);
+  transition: opacity 0.58s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.58s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-#payments.show > *,
-#transactions.show > *,
-#investments.show > * {
+#payments.show > *, #transactions.show > *, #investments.show > * {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
 }
 
-/* ---- Stagger for large panels ---- */
+/* Stagger inside large panels */
 #payments.show > *:nth-child(1),
 #transactions.show > *:nth-child(1),
-#investments.show > *:nth-child(1) { transition-delay: 0.18s; }
-
+#investments.show > *:nth-child(1) { transition-delay: 0.10s; }
 #payments.show > *:nth-child(2),
 #transactions.show > *:nth-child(2),
-#investments.show > *:nth-child(2) { transition-delay: 0.36s; }
-
+#investments.show > *:nth-child(2) { transition-delay: 0.20s; }
 #payments.show > *:nth-child(3),
 #transactions.show > *:nth-child(3),
-#investments.show > *:nth-child(3) { transition-delay: 0.54s; }
-
+#investments.show > *:nth-child(3) { transition-delay: 0.30s; }
 #payments.show > *:nth-child(4),
 #transactions.show > *:nth-child(4),
-#investments.show > *:nth-child(4) { transition-delay: 0.72s; }
-
+#investments.show > *:nth-child(4) { transition-delay: 0.40s; }
 #payments.show > *:nth-child(5),
 #transactions.show > *:nth-child(5),
-#investments.show > *:nth-child(5) { transition-delay: 0.90s; }
-
+#investments.show > *:nth-child(5) { transition-delay: 0.50s; }
 #payments.show > *:nth-child(6),
 #transactions.show > *:nth-child(6),
-#investments.show > *:nth-child(6) { transition-delay: 1.08s; }
+#investments.show > *:nth-child(6) { transition-delay: 0.60s; }
 
-/* ================= Premium Overview Panel ================= */
-
-/* Overview Panel initial state */
+/* Overview Panel */
 #overview {
   opacity: 0;
-  transform: scale(0.97);
-
-  transition:
-    opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: scale(0.95);
+  transition: opacity 0.80s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.80s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-/* Overview Panel when shown */
 #overview.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Children inside Overview */
 #overview > * {
   opacity: 0;
-  transform: scale(0.99);
-
-  transition:
-    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: translateY(0) scale(0.97);
+  transition: opacity 0.65s cubic-bezier(0.25,0.8,0.25,1),
+              transform 0.65s cubic-bezier(0.25,0.8,0.25,1);
 }
 
-/* Show children of Overview */
 #overview.show > * {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
 }
 
 /* Stagger for Overview children */
-#overview.show > *:nth-child(1) { transition-delay: 0.2s; }
-#overview.show > *:nth-child(2) { transition-delay: 0.4s; }
-#overview.show > *:nth-child(3) { transition-delay: 0.6s; }
-#overview.show > *:nth-child(4) { transition-delay: 0.8s; }
-#overview.show > *:nth-child(5) { transition-delay: 1.0s; }
-#overview.show > *:nth-child(6) { transition-delay: 1.2s; }
-#overview.show > *:nth-child(7) { transition-delay: 1.4s; }
-#overview.show > *:nth-child(8) { transition-delay: 1.6s; }
+#overview.show > *:nth-child(1) { transition-delay: 0.10s; }
+#overview.show > *:nth-child(2) { transition-delay: 0.20s; }
+#overview.show > *:nth-child(3) { transition-delay: 0.30s; }
+#overview.show > *:nth-child(4) { transition-delay: 0.40s; }
+#overview.show > *:nth-child(5) { transition-delay: 0.50s; }
+#overview.show > *:nth-child(6) { transition-delay: 0.60s; }
+#overview.show > *:nth-child(7) { transition-delay: 0.70s; }
+#overview.show > *:nth-child(8) { transition-delay: 0.80s; }
 
-/* Utility */
-.hidden {
-  display: none !important;
+/* ---- Buttons ---- */
+button.processing {
+  opacity: 0.7;
+  transform: translateY(-2px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
+button {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hidden { display: none !important; }
+   
 
 #investments{
   min-width:300px;       /* make card wider */
