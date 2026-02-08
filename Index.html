@@ -674,7 +674,7 @@ function showTransferMessage(text, type = 'error', duration = 3000) {
   const box = document.getElementById('transferMessage');
   if (!box) return;
 
-  // Reset styles every time
+  // Reset & show message
   box.classList.remove('hidden');
   box.textContent = text;
 
@@ -682,7 +682,7 @@ function showTransferMessage(text, type = 'error', duration = 3000) {
     box.style.background = '#fee2e2';
     box.style.color = '#991b1b';
   } else {
-    box.style.background = '#ecfdf5';
+    box.style.background = '#d1fae5'; // nicer green
     box.style.color = '#065f46';
   }
 
@@ -701,43 +701,59 @@ function nextTransferStep() {
       showTransferMessage("Please select a transfer type.");
       return;
     }
-    document.getElementById('transferStep1').classList.add('hidden');
-    document.getElementById('transferStep2').classList.remove('hidden');
-    transferStep = 2;
-  } else if (transferStep === 2) {
-  const requiredFields = [
-    'beneficiaryName',
-    'bankName',
-    'accountNumber',
-    'swiftBic',
-    'country',
-    'transferAmount',
-    'transferCurrency'
-  ];
 
-  for (let id of requiredFields) {
-    const el = document.getElementById(id);
-    if (!el.value.trim()) {
-      showTransferMessage("Please fill all required fields.");
+    const btn = document.querySelector('#transferStep1 button');
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      document.getElementById('transferStep1').classList.add('hidden');
+      document.getElementById('transferStep2').classList.remove('hidden');
+      transferStep = 2;
+      btn.textContent = 'Continue';
+      btn.disabled = false;
+    }, 1200); // fake delay
+  } else if (transferStep === 2) {
+    const requiredFields = [
+      'beneficiaryName',
+      'bankName',
+      'accountNumber',
+      'swiftBic',
+      'country',
+      'transferAmount',
+      'transferCurrency'
+    ];
+
+    for (let id of requiredFields) {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        showTransferMessage("Please fill all required fields.");
+        return;
+      }
+    }
+
+    const amount = parseFloat(document.getElementById('transferAmount').value);
+    if (isNaN(amount) || amount <= 0) {
+      showTransferMessage("Enter a valid transfer amount.");
       return;
     }
-  }
+    if (amount > accountBalance) {
+      showTransferMessage("Insufficient balance.");
+      return;
+    }
 
-  const amount = parseFloat(document.getElementById('transferAmount').value);
-  if (isNaN(amount) || amount <= 0) {
-    showTransferMessage("Enter a valid transfer amount.");
-    return;
-  }
+    const btn = document.querySelector('#transferStep2 button');
+    btn.textContent = 'Reviewing...';
+    btn.disabled = true;
 
-  if (amount > accountBalance) {
-    showTransferMessage("Insufficient balance.");
-    return;
+    setTimeout(() => {
+      document.getElementById('transferStep2').classList.add('hidden');
+      document.getElementById('transferStep3').classList.remove('hidden');
+      transferStep = 3;
+      btn.textContent = 'Review Transfer';
+      btn.disabled = false;
+    }, 1200);
   }
-
-  document.getElementById('transferStep2').classList.add('hidden');
-  document.getElementById('transferStep3').classList.remove('hidden');
-  transferStep = 3;
- }
 }
 
 // Hardcoded COT code
@@ -752,7 +768,6 @@ function finalizeTransfer() {
 
   const amountInput = document.getElementById('transferAmount');
   const beneficiaryInput = document.getElementById('beneficiaryName');
-
   const amount = parseFloat(amountInput.value);
   const beneficiary = beneficiaryInput.value.trim();
 
@@ -760,47 +775,55 @@ function finalizeTransfer() {
     showTransferMessage("Please fill all required fields.");
     return;
   }
-
   if (amount > accountBalance) {
     showTransferMessage("Insufficient balance.");
     return;
   }
 
-  const today = new Date().toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  });
+  const btn = document.querySelector('#transferStep3 button');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
 
-  // Deduct balance
-  accountBalance -= amount;
-  updateBalanceDisplay();
+  setTimeout(() => {
+    // Deduct balance & add transaction
+    accountBalance -= amount;
+    updateBalanceDisplay();
+    const today = new Date().toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    });
+    const tableBody = document.getElementById('transactionTable');
+    const row = tableBody.insertRow(0);
+    row.innerHTML = `
+      <td>${today}</td>
+      <td>Transfer to ${beneficiary}</td>
+      <td>- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+    `;
 
-  // Add transaction row
-  const tableBody = document.getElementById('transactionTable');
-  const row = tableBody.insertRow(0);
+    showTransferMessage("Transfer completed successfully.", "success");
+    resetTransfer();
+    showSection('overview');
 
-  row.innerHTML = `
-    <td>${today}</td>
-    <td>Transfer to ${beneficiary}</td>
-    <td>- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-  `;
-
-  showTransferMessage("Transfer completed successfully.", "success");
-
-  resetTransfer();
-  showSection('overview');
- }
+    btn.textContent = 'Complete Transfer';
+    btn.disabled = false;
+  }, 1500); // fake latency
+}
   function resetTransfer() {
   transferStep = 1;
-
   document.getElementById('transferStep1').classList.remove('hidden');
   document.getElementById('transferStep2').classList.add('hidden');
   document.getElementById('transferStep3').classList.add('hidden');
 
+  // Clear all inputs/selects
   document.querySelectorAll('#payments input, #payments select')
     .forEach(el => el.value = '');
+
+  // Hide message
+  const box = document.getElementById('transferMessage');
+  if (box) {
+    box.classList.add('hidden');
+    box.textContent = '';
   }
+}
 </script>
 </body>
 </html>
