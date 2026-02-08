@@ -138,53 +138,47 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   min-width:0; /* allows child panels to shrink correctly */
 }
 
-/* PANEL CONTAINER: fade + scale from center, slower for premium feel */
-.panel {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  padding: 24px;
-  margin-bottom: 24px;
-  width: 100%;
-  overflow-x: auto;
-  box-sizing: border-box;
+/* ========== Ultimate Credit Suisse Dashboard Animation ========== */
 
-  /* fade + scale from center */
+/* Panel base state */
+.panel {
   opacity: 0;
-  transform: scale(0.92);
-  transition: opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), 
-              transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
+  transform: scale(0.95); /* middle-origin float */
+  transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1),
+              transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Panel shown */
 .panel.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* CHILD ELEMENTS: subtle pop-in with slower stagger */
+/* Panel children base state */
 .panel > * {
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), 
-              transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
+  transform: scale(0.97);
+  transition: opacity 0.65s cubic-bezier(0.25, 0.8, 0.25, 1),
+              transform 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Panel children shown */
 .panel.show > * {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Stagger delays for elegant entrance (slightly longer) */
-.panel.show > *:nth-child(1) { transition-delay: 0.1s; }
-.panel.show > *:nth-child(2) { transition-delay: 0.18s; }
-.panel.show > *:nth-child(3) { transition-delay: 0.26s; }
-.panel.show > *:nth-child(4) { transition-delay: 0.34s; }
-.panel.show > *:nth-child(5) { transition-delay: 0.42s; }
-.panel.show > *:nth-child(6) { transition-delay: 0.50s; }
-.panel.show > *:nth-child(7) { transition-delay: 0.58s; }
-.panel.show > *:nth-child(8) { transition-delay: 0.66s; }
-.panel.show > *:nth-child(9) { transition-delay: 0.74s; }
-.panel.show > *:nth-child(10){ transition-delay: 0.82s; }
+/* Staggering for panel children */
+.panel.show > *:nth-child(1) { transition-delay: 0.10s; }
+.panel.show > *:nth-child(2) { transition-delay: 0.20s; }
+.panel.show > *:nth-child(3) { transition-delay: 0.30s; }
+.panel.show > *:nth-child(4) { transition-delay: 0.40s; }
+.panel.show > *:nth-child(5) { transition-delay: 0.50s; }
+.panel.show > *:nth-child(6) { transition-delay: 0.60s; }
+.panel.show > *:nth-child(7) { transition-delay: 0.70s; }
+.panel.show > *:nth-child(8) { transition-delay: 0.80s; }
+.panel.show > *:nth-child(9) { transition-delay: 0.90s; }
+.panel.show > *:nth-child(10){ transition-delay: 1.00s; } 
    
 .hidden {
   display: none !important;
