@@ -677,11 +677,39 @@ function nextTransferStep() {
     document.getElementById('transferStep2').classList.remove('hidden');
     transferStep = 2;
   } else if (transferStep === 2) {
-    // You can add validation here if needed
-    document.getElementById('transferStep2').classList.add('hidden');
-    document.getElementById('transferStep3').classList.remove('hidden');
-    transferStep = 3;
+  const requiredFields = [
+    'beneficiaryName',
+    'bankName',
+    'accountNumber',
+    'swiftBic',
+    'country',
+    'transferAmount',
+    'transferCurrency'
+  ];
+
+  for (let id of requiredFields) {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      alert('Please fill all required fields.');
+      return;
+    }
   }
+
+  const amount = parseFloat(document.getElementById('transferAmount').value);
+  if (isNaN(amount) || amount <= 0) {
+    alert('Enter a valid transfer amount.');
+    return;
+  }
+
+  if (amount > accountBalance) {
+    alert('Insufficient balance.');
+    return;
+  }
+
+  document.getElementById('transferStep2').classList.add('hidden');
+  document.getElementById('transferStep3').classList.remove('hidden');
+  transferStep = 3;
+ }
 }
 
 // Hardcoded COT code
