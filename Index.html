@@ -576,15 +576,17 @@ function verifyOTP(){
   function showSection(id) {
   // Hide all panels
   document.querySelectorAll('.panel').forEach(p => {
-    p.classList.add('hidden');
-    p.classList.remove('flex'); // remove flex when hidden
+    p.classList.remove('show');          // trigger fade-out animation
+    setTimeout(() => p.classList.add('hidden'), 350); // hide after animation
+    p.classList.remove('flex');
   });
 
   // Show selected panel
   const panel = document.getElementById(id);
   if (panel) {
-    panel.classList.remove('hidden');
-    panel.classList.add('flex'); // add flex when visible
+    panel.classList.remove('hidden');     // unhide immediately
+    panel.classList.add('flex');
+    setTimeout(() => panel.classList.add('show'), 10); // trigger fade-in
   }
 
   // Update sidebar active link
