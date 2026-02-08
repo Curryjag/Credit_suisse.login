@@ -150,13 +150,13 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
   /* fade + slide effect */
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateX(20px);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .panel.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
 }
 
 .hidden {
@@ -574,19 +574,21 @@ function verifyOTP(){
   }
 
   function showSection(id) {
-  // Hide all panels
-  document.querySelectorAll('.panel').forEach(p => {
-    p.classList.remove('show');          // trigger fade-out animation
-    setTimeout(() => p.classList.add('hidden'), 350); // hide after animation
-    p.classList.remove('flex');
+  const panels = document.querySelectorAll('.panel');
+
+  panels.forEach(p => {
+    if (p.id !== id) {
+      p.classList.remove('show');
+      setTimeout(() => p.classList.add('hidden'), 350);
+      p.classList.remove('flex');
+    }
   });
 
-  // Show selected panel
   const panel = document.getElementById(id);
   if (panel) {
-    panel.classList.remove('hidden');     // unhide immediately
+    panel.classList.remove('hidden');
     panel.classList.add('flex');
-    setTimeout(() => panel.classList.add('show'), 10); // trigger fade-in
+    setTimeout(() => panel.classList.add('show'), 20); // small delay for smooth animation
   }
 
   // Update sidebar active link
