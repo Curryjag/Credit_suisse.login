@@ -149,14 +149,14 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   box-sizing:border-box;
 
   /* fade + slide effect */
+  .panel {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateY(10px);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
-
 .panel.show {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 /* Base state for panel children */
@@ -182,6 +182,9 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 .panel.show > *:nth-child(6) { transition-delay: 0.30s; }
 .panel.show > *:nth-child(7) { transition-delay: 0.35s; }
 .panel.show > *:nth-child(8) { transition-delay: 0.40s; }
+.panel.show > *:nth-child(9) { transition-delay: 0.45s; }
+.panel.show > *:nth-child(10){ transition-delay: 0.50s; }
+  
    
 .hidden {
   display: none !important;
