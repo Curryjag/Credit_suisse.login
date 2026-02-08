@@ -138,22 +138,24 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   min-width:0; /* allows child panels to shrink correctly */
 }
 
+/* Panel base state */
 .panel {
-  background:#fff;
-  border-radius:6px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  padding:24px;
-  margin-bottom:24px;
-  width:100%;
-  overflow-x:auto;
-  box-sizing:border-box;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
 
-  /* fade + slide effect */
-  .panel {
+  /* fade + slide in from right */
   opacity: 0;
-  transform: translateX(20px); /* slide in from right */
+  transform: translateX(20px);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
+
+/* Panel shown */
 .panel.show {
   opacity: 1;
   transform: translateX(0);
@@ -167,7 +169,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
               transform 0.45s cubic-bezier(0.2,0,0,1);
 }
 
-/* Panel is shown: children animate in */
+/* Animate children when panel shows */
 .panel.show > * {
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -183,8 +185,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 .panel.show > *:nth-child(7) { transition-delay: 0.35s; }
 .panel.show > *:nth-child(8) { transition-delay: 0.40s; }
 .panel.show > *:nth-child(9) { transition-delay: 0.45s; }
-.panel.show > *:nth-child(10){ transition-delay: 0.50s; }
-  
+.panel.show > *:nth-child(10) { transition-delay: 0.50s; }
    
 .hidden {
   display: none !important;
