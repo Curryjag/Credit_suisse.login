@@ -503,21 +503,29 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   }, duration);
   }
   
+function login(){
+  const u = document.getElementById('user').value;
+  const p = document.getElementById('pass').value;
 
-  function login(){
-    const u = document.getElementById('user').value;
-    const p = document.getElementById('pass').value;
-
-    if(btoa(u) === encodedUser && btoa(p) === encodedPass){
-      document.getElementById('loginError').style.display='none';
-      document.getElementById('loginPage').classList.add('hidden');
-      document.getElementById('secureAccess').classList.remove('hidden');
-    } else {
-      showTempError('loginError');
-    }
+  if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('secureAccess').classList.remove('hidden');
+  } else {
+    showTempError('loginError');
   }
+}
 
-  function verifyOTP(){
+let accountBalance = 125430.55;
+
+function updateBalanceDisplay() {
+  document.getElementById('balanceDisplay').textContent =
+    'CHF ' + accountBalance.toLocaleString(undefined, {
+      minimumFractionDigits: 2
+    });
+}
+
+function verifyOTP(){
   const inputCode = document.getElementById('otp').value;
   const error = document.getElementById('phoneError');
 
