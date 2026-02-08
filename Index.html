@@ -717,17 +717,52 @@ const encodedCOT = btoa("COT-884219");
 
 function finalizeTransfer() {
   const inputCOT = document.getElementById('cotCode').value;
-  if (btoa(inputCOT) === encodedCOT) {
-    alert("Transfer Successful!"); // You can later replace with modal + append transaction
-    // Reset wizard
-    document.getElementById('transferStep3').classList.add('hidden');
-    document.getElementById('transferStep1').classList.remove('hidden');
-    transferStep = 1;
-    document.getElementById('payments').classList.add('hidden');
-    showSection('overview');
-  } else {
+  if (btoa(inputCOT) !== encodedCOT) {
     showTempError('cotError');
+    return;
   }
+
+  const amountInput = document.getElementById('transferAmount');
+  const beneficiaryInput = document.getElementById('beneficiaryName');
+
+  const amount = parseFloat(amountInput.value);
+  const beneficiary = beneficiaryInput.value.trim();
+
+  if (!amount || amount <= 0 || !beneficiary) {
+    alert('Please fill all required transfer fields');
+    return;
+  }
+
+  if (amount > accountBalance) {
+    alert('Insufficient balance');
+    return;
+  }
+
+  const today = new Date().toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+
+  // Deduct balance
+  accountBalance -= amount;
+  updateBalanceDisplay();
+
+  // Add transaction row
+  const tableBody = document.getElementById('transactionTable');
+  const row = tableBody.insertRow(0);
+
+  row.innerHTML = `
+    <td>${today}</td>
+    <td>Transfer to ${beneficiary}</td>
+    <td>- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+  `;
+
+  alert('Transfer successful.');
+
+  resetTransfer();
+  showSection('overview');
+ }
 }
 </script>
 </body>
