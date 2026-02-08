@@ -138,47 +138,148 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   min-width:0; /* allows child panels to shrink correctly */
 }
 
-/* ========== Ultimate Credit Suisse Dashboard Animation ========== */
+/* ================= Premium Panel Animations ================= */
 
-/* Panel base state */
+/* ---- Base Panel Style ---- */
 .panel {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+
+  /* Initial state */
   opacity: 0;
-  transform: scale(0.95); /* middle-origin float */
-  transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1),
-              transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: scale(0.96); /* small starting scale */
+  transition: 
+    opacity 0.72s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.72s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Panel shown */
+/* ---- Show Panel ---- */
 .panel.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Panel children base state */
+/* ---- Children of Panels ---- */
 .panel > * {
   opacity: 0;
-  transform: scale(0.97);
-  transition: opacity 0.65s cubic-bezier(0.25, 0.8, 0.25, 1),
-              transform 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: translateY(0) scale(0.97); /* calm middle lift */
+  transition: 
+    opacity 0.58s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.58s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Panel children shown */
+/* ---- Show Children ---- */
 .panel.show > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---- Stagger for all panel children ---- */
+.panel.show > *:nth-child(1)  { transition-delay: 0.08s; }
+.panel.show > *:nth-child(2)  { transition-delay: 0.16s; }
+.panel.show > *:nth-child(3)  { transition-delay: 0.24s; }
+.panel.show > *:nth-child(4)  { transition-delay: 0.32s; }
+.panel.show > *:nth-child(5)  { transition-delay: 0.40s; }
+.panel.show > *:nth-child(6)  { transition-delay: 0.48s; }
+.panel.show > *:nth-child(7)  { transition-delay: 0.56s; }
+.panel.show > *:nth-child(8)  { transition-delay: 0.64s; }
+.panel.show > *:nth-child(9)  { transition-delay: 0.72s; }
+.panel.show > *:nth-child(10) { transition-delay: 0.80s; }
+
+/* ---- Specific Large Panels (Payments, Transactions, Investments) ---- */
+#payments, #transactions, #investments {
+  transform: scale(0.94); /* slightly larger start */
+  transition: 
+    opacity 0.72s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.72s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#payments.show, #transactions.show, #investments.show {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Staggering for panel children */
-.panel.show > *:nth-child(1) { transition-delay: 0.10s; }
-.panel.show > *:nth-child(2) { transition-delay: 0.20s; }
-.panel.show > *:nth-child(3) { transition-delay: 0.30s; }
-.panel.show > *:nth-child(4) { transition-delay: 0.40s; }
-.panel.show > *:nth-child(5) { transition-delay: 0.50s; }
-.panel.show > *:nth-child(6) { transition-delay: 0.60s; }
-.panel.show > *:nth-child(7) { transition-delay: 0.70s; }
-.panel.show > *:nth-child(8) { transition-delay: 0.80s; }
-.panel.show > *:nth-child(9) { transition-delay: 0.90s; }
-.panel.show > *:nth-child(10){ transition-delay: 1.00s; } 
+/* Children inside large panels */
+#payments > *, #transactions > *, #investments > * {
+  opacity: 0;
+  transform: translateY(0) scale(0.97); /* calm middle lift */
+  transition: 
+    opacity 0.58s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.58s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#payments.show > *, #transactions.show > *, #investments.show > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger for children inside large panels */
+#payments.show > *:nth-child(1),
+#transactions.show > *:nth-child(1),
+#investments.show > *:nth-child(1)  { transition-delay: 0.10s; }
+#payments.show > *:nth-child(2),
+#transactions.show > *:nth-child(2),
+#investments.show > *:nth-child(2)  { transition-delay: 0.20s; }
+#payments.show > *:nth-child(3),
+#transactions.show > *:nth-child(3),
+#investments.show > *:nth-child(3)  { transition-delay: 0.30s; }
+#payments.show > *:nth-child(4),
+#transactions.show > *:nth-child(4),
+#investments.show > *:nth-child(4)  { transition-delay: 0.40s; }
+#payments.show > *:nth-child(5),
+#transactions.show > *:nth-child(5),
+#investments.show > *:nth-child(5)  { transition-delay: 0.50s; }
+#payments.show > *:nth-child(6),
+#transactions.show > *:nth-child(6),
+#investments.show > *:nth-child(6)  { transition-delay: 0.60s; }
+   
+/* ================= Premium Overview Panel ================= */
+
+/* Overview Panel initial state */
+#overview {
+  opacity: 0;
+  transform: scale(0.95); /* slightly smaller starting scale */
+  transition: 
+    opacity 0.80s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.80s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Overview Panel when shown */
+#overview.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Children inside Overview */
+#overview > * {
+  opacity: 0;
+  transform: translateY(0) scale(0.97); /* calm middle lift, no rush from bottom */
+  transition: 
+    opacity 0.65s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Show children of Overview */
+#overview.show > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger for Overview children */
+#overview.show > *:nth-child(1) { transition-delay: 0.10s; }
+#overview.show > *:nth-child(2) { transition-delay: 0.20s; }
+#overview.show > *:nth-child(3) { transition-delay: 0.30s; }
+#overview.show > *:nth-child(4) { transition-delay: 0.40s; }
+#overview.show > *:nth-child(5) { transition-delay: 0.50s; }
+#overview.show > *:nth-child(6) { transition-delay: 0.60s; }
+#overview.show > *:nth-child(7) { transition-delay: 0.70s; }
+#overview.show > *:nth-child(8) { transition-delay: 0.80s; }
    
 .hidden {
   display: none !important;
