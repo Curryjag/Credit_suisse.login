@@ -744,6 +744,31 @@ function saveState() {
 let state = loadState();
 let encodedPass = state.credentials.encodedPass;
 let twoFactorEnabled = state.credentials.twoFactorEnabled;
+
+function addSecurityEvent(type) {
+  const event = {
+    type,
+    timestamp: new Date().toLocaleString(),
+    device: navigator.userAgent.split(')')[0] + ')'
+  };
+
+  state.security.events.unshift(event);
+  saveState();
+  renderSecurityEvents();
+}
+
+function renderSecurityEvents() {
+  const list = document.getElementById('securityEvents');
+  if (!list) return;
+
+  list.innerHTML = '';
+  state.security.events.slice(0, 10).forEach(e => {
+    const li = document.createElement('li');
+    li.style.marginBottom = '8px';
+    li.innerHTML = `<strong>${e.type}</strong><br><span class="muted">${e.timestamp} · ${e.device}</span>`;
+    list.appendChild(li);
+  });
+}
   
   const encodedLoginCode = btoa('739201');
 
