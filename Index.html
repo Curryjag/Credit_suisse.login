@@ -1164,8 +1164,24 @@ function finalizeTransfer() {
   }
 }
   document.addEventListener('DOMContentLoaded', () => {
+  // Initialize 2FA toggle and security events
   document.getElementById('toggle2FA').checked = twoFactorEnabled;
   renderSecurityEvents();
+
+  // Accordion / collapsible settings sections
+  document.querySelectorAll('.section-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const content = btn.nextElementSibling;
+
+      // Close all other sections
+      document.querySelectorAll('.section-content').forEach(c => {
+        if (c !== content) c.classList.remove('open');
+      });
+
+      // Toggle clicked section
+      content.classList.toggle('open');
+    });
+  });
 });
 </script>
 </body>
