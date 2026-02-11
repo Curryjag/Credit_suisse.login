@@ -830,6 +830,56 @@ function verifyOTP(){
   showSection('overview');
 }
 
+function changePassword() {
+  const oldP = document.getElementById('oldPassword').value;
+  const newP = document.getElementById('newPassword').value;
+  const confirmP = document.getElementById('confirmPassword').value;
+  const msg = document.getElementById('passwordMsg');
+
+  msg.style.display = 'block';
+
+  if (btoa(oldP) !== encodedPass) {
+    msg.textContent = 'Current password incorrect.';
+    msg.className = 'error';
+    return;
+  }
+
+  if (newP.length < 6 || newP !== confirmP) {
+    msg.textContent = 'Password validation failed.';
+    msg.className = 'error';
+    return;
+  }
+
+  encodedPass = btoa(newP);
+  state.credentials.encodedPass = encodedPass;
+  saveState();
+  addSecurityEvent('PASSWORD_CHANGED');
+
+  msg.textContent = 'Password successfully changed.';
+  msg.className = 'success';
+
+  document.getElementById('oldPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+}
+  
+function toggle2FA() {
+  twoFactorEnabled = document.getElementById('toggle2FA').checked;
+  state.credentials.twoFactorEnabled = twoFactorEnabled;
+  saveState();
+
+  const msg = document.getElementById('twoFaMsg');
+  msg.style.display = 'block';
+
+  addSecurityEvent(twoFactorEnabled ? '2FA_ENABLED' : '2FA_DISABLED');
+
+  msg.textContent = twoFactorEnabled
+    ? 'Two-factor authentication enabled.'
+    : 'Two-factor authentication disabled.';
+  msg.className = twoFactorEnabled ? 'success' : 'error';
+    }
+  
+  
   function logout(){
     document.getElementById('dashboard').classList.add('hidden');
     document.getElementById('secureAccess').classList.add('hidden');
