@@ -786,10 +786,19 @@ function renderSecurityEvents() {
   const p = document.getElementById('pass').value;
 
   if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
-    document.getElementById('loginError').style.display = 'none';
+    addSecurityEvent('LOGIN_SUCCESS');
     document.getElementById('loginPage').classList.add('hidden');
-    document.getElementById('secureAccess').classList.remove('hidden');
+
+    if (twoFactorEnabled) {
+      document.getElementById('secureAccess').classList.remove('hidden');
+    } else {
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('topbarUser').classList.remove('hidden');
+      updateBalanceDisplay();
+      showSection('overview');
+    }
   } else {
+    addSecurityEvent('LOGIN_FAILED');
     showTempError('loginError');
   }
 }
