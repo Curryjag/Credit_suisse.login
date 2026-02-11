@@ -894,12 +894,14 @@ function changePassword() {
   if (btoa(oldP) !== encodedPass) {
     msg.textContent = 'Current password incorrect.';
     msg.className = 'error';
+    autoHide(msg);
     return;
   }
 
   if (newP.length < 6 || newP !== confirmP) {
     msg.textContent = 'Password validation failed.';
     msg.className = 'error';
+    autoHide(msg);
     return;
   }
 
@@ -910,10 +912,19 @@ function changePassword() {
 
   msg.textContent = 'Password successfully changed.';
   msg.className = 'success';
+  autoHide(msg);
 
+  // Clear inputs
   document.getElementById('oldPassword').value = '';
   document.getElementById('newPassword').value = '';
   document.getElementById('confirmPassword').value = '';
+}
+
+// Helper to auto-hide message after 3 seconds
+function autoHide(element, timeout = 3000) {
+  setTimeout(() => {
+    element.style.display = 'none';
+  }, timeout);
 }
   
 function toggle2FA() {
