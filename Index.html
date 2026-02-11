@@ -642,12 +642,55 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
           </div>
         </div>
 
-        <div id="settings" class="panel hidden">
-          <h2>Settings</h2>
-          <p class="muted">User preferences placeholder.</p>
-        </div>
-      </div>
-    </div>
+        <div id="settings" class="panel hidden flex">
+  <h2>Settings</h2>
+
+  <!-- ACCOUNT DETAILS -->
+  <div class="panel-section">
+    <h3>Account & Transfer Details</h3>
+    <table class="table">
+      <tr><th>Account Holder</th><td>Gerard Müller</td></tr>
+      <tr><th>Account Type</th><td>Private Banking</td></tr>
+      <tr><th>Account Number</th><td>623852957</td></tr>
+      <tr><th>IBAN</th><td>CH93 0076 2011 6238 5295 7</td></tr>
+      <tr><th>SWIFT / BIC</th><td>CRESCHZZ80A</td></tr>
+      <tr><th>Bank</th><td>Credit Suisse AG</td></tr>
+      <tr><th>Branch</th><td>Zurich – Paradeplatz</td></tr>
+      <tr><th>Country</th><td>Switzerland</td></tr>
+      <tr><th>Relationship Manager</th><td>Anna Keller</td></tr>
+    </table>
+  </div>
+
+  <!-- SECURITY -->
+  <div class="panel-section">
+    <h3>Security & Access</h3>
+
+    <label>Current Password</label>
+    <input type="password" id="oldPassword">
+
+    <label>New Password</label>
+    <input type="password" id="newPassword">
+
+    <label>Confirm New Password</label>
+    <input type="password" id="confirmPassword">
+
+    <button onclick="changePassword()">Change Password</button>
+    <div id="passwordMsg" class="muted" style="margin-top:10px;display:none;"></div>
+
+    <hr style="margin:20px 0;">
+
+    <label>
+      <input type="checkbox" id="toggle2FA" onchange="toggle2FA()"> Enable Two-Factor Authentication (OTP)
+    </label>
+    <div id="twoFaMsg" class="muted" style="margin-top:10px;display:none;"></div>
+  </div>
+
+  <!-- SECURITY EVENTS -->
+  <div class="panel-section">
+    <h3>Security Events</h3>
+    <ul id="securityEvents" style="list-style:none;padding:0;margin:0;"></ul>
+  </div>
+</div>
 
     <footer style="text-align:center;font-size:12px;color:#6b7280;margin:20px 0;">
       © 2026 Your Company. All rights reserved. | Privacy Policy | Legal Notice | Cookies
