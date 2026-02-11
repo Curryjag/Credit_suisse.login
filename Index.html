@@ -1247,6 +1247,96 @@ function finalizeTransfer() {
     });
   });
 });
+  // ===== CENTRALIZED LOGOUT FUNCTION =====
+function performLogout() {
+  addSecurityEvent('LOGOUT');
+
+  // Clear sensitive login fields
+  const loginInputs = ['user', 'pass', 'otpInput'];
+  loginInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Clear OTP display
+  const otpDisplay = document.getElementById('otpDisplay');
+  if (otpDisplay) otpDisplay.textContent = '';
+
+  // Hide dashboard, topbar, secure sections
+  document.getElementById('dashboard')?.classList.add('hidden');
+  document.getElementById('topbarUser')?.classList.add('hidden');
+  document.getElementById('secureAccess')?.classList.add('hidden');
+  document.getElementById('loginPage')?.classList.remove('hidden');
+
+  // Refresh page to simulate "fresh login"
+  setTimeout(() => location.reload(), 100);
+}
+
+// ===== SESSION TIMEOUT =====
+const SESSION_TIMEOUT_MINUTES = 3;
+let sessionTimer;
+
+function resetSessionTimer() {
+  clearTimeout(sessionTimer);
+  sessionTimer = setTimeout(() => {
+    addSecurityEvent('SESSION_EXPIRED');
+    performLogout();
+  }, SESSION_TIMEOUT_MINUTES * 60 * 1000);
+}
+
+// Attach activity listeners
+['mousemove', 'keydown', 'click', 'touchstart'].forEach(evt =>
+  document.addEventListener(evt, resetSessionTimer)
+);
+
+// Start timer on page load
+document.addEventListener('DOMContentLoaded', () => {
+  resetSessionTimer();
+  if (twoFactorEnabled) generateAndShowOTP();
+});
+
+// ===== LOGOUT BUTTON =====
+document.getElementById('logoutBtn')?.addEventListener('click', performLogout);
+
+// ===== OTP FUNCTIONS =====
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function generateAndShowOTP() {
+  const otp = generateOTP();
+  localStorage.setItem('currentOTP', otp);
+  const display = document.getElementById('otpDisplay');
+  if (display) display.textContent = `Your OTP: ${otp}`;
+}
+
+function submitOTP() {
+  const input = document.getElementById('otpInput')?.value;
+  const result = document.getElementById('otpResult');
+  const currentOTP = localStorage.getItem('currentOTP');
+
+  if (!input || !result) return;
+
+  result.style.display = 'block';
+  if (input === currentOTP) {
+    result.textContent = 'OTP verified successfully.';
+    result.className = 'success';
+    addSecurityEvent('OTP_VERIFIED');
+    localStorage.removeItem('currentOTP');
+    document.getElementById('secureAccess')?.classList.add('hidden');
+    document.getElementById('dashboard')?.classList.remove('hidden');
+    document.getElementById('topbarUser')?.classList.remove('hidden');
+    updateBalanceDisplay?.();
+    showSection?.('overview');
+  } else {
+    result.textContent = 'Incorrect OTP.';
+    result.className = 'error';
+    addSecurityEvent('OTP_FAILED');
+    generateAndShowOTP();
+  }
+
+  document.getElementById('otpInput').value = '';
+  }
 </script>
 </body>
 </html>
