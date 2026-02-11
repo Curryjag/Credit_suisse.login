@@ -1248,35 +1248,29 @@ function finalizeTransfer() {
     });
   });
 });
-  // ===== CENTRALIZED LOGOUT FUNCTION =====
-function performLogout() {
-  addSecurityEvent('LOGOUT');
 
-  // Clear sensitive login fields
-  const loginInputs = ['user', 'pass', 'otpInput'];
-  loginInputs.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  /* ================= SESSION + OTP CONTROL ================= */
 
-  // Clear OTP display
-  const otpDisplay = document.getElementById('otpDisplay');
-  if (otpDisplay) otpDisplay.textContent = '';
-
-  // Hide dashboard, topbar, secure sections
-  document.getElementById('dashboard')?.classList.add('hidden');
-  document.getElementById('topbarUser')?.classList.add('hidden');
-  document.getElementById('secureAccess')?.classList.add('hidden');
-  document.getElementById('loginPage')?.classList.remove('hidden');
-
-  // Refresh page to simulate "fresh login"
-  setTimeout(() => location.reload(), 100);
-}
-
-// ===== SESSION TIMEOUT =====
+// 3 minutes inactivity
 const SESSION_TIMEOUT_MINUTES = 3;
 let sessionTimer;
+let currentOTP = null;
 
+// Generate OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Show OTP on Secure Access screen
+function generateAndShowOTP() {
+  currentOTP = generateOTP();
+  const display = document.getElementById('otpDisplay');
+  if (display) {
+    display.textContent = `Your verification code: ${currentOTP}`;
+  }
+}
+
+// Reset inactivity timer
 function resetSessionTimer() {
   clearTimeout(sessionTimer);
   sessionTimer = setTimeout(() => {
@@ -1285,59 +1279,86 @@ function resetSessionTimer() {
   }, SESSION_TIMEOUT_MINUTES * 60 * 1000);
 }
 
-// Attach activity listeners
-['mousemove', 'keydown', 'click', 'touchstart'].forEach(evt =>
+// Central logout (used by timeout AND manual logout)
+function performLogout() {
+  addSecurityEvent('LOGOUT');
+
+  // Clear sensitive fields
+  ['user','pass','otp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  currentOTP = null;
+
+  // Hide everything
+  document.getElementById('dashboard')?.classList.add('hidden');
+  document.getElementById('secureAccess')?.classList.add('hidden');
+  document.getElementById('topbarUser')?.classList.add('hidden');
+  document.getElementById('loginPage')?.classList.remove('hidden');
+
+  // Full refresh (keeps localStorage)
+  setTimeout(() => location.reload(), 100);
+}
+
+// Activity listeners
+['mousemove','keydown','click','touchstart'].forEach(evt =>
   document.addEventListener(evt, resetSessionTimer)
 );
 
-// Start timer on page load
-document.addEventListener('DOMContentLoaded', () => {
-  resetSessionTimer();
-  if (twoFactorEnabled) generateAndShowOTP();
-});
+// Start timer on load
+document.addEventListener('DOMContentLoaded', resetSessionTimer);
 
-// ===== LOGOUT BUTTON =====
-document.getElementById('logoutBtn')?.addEventListener('click', performLogout);
-
-// ===== OTP FUNCTIONS =====
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+// Override existing logout()
+function logout() {
+  performLogout();
 }
 
-function generateAndShowOTP() {
-  const otp = generateOTP();
-  localStorage.setItem('currentOTP', otp);
-  const display = document.getElementById('otpDisplay');
-  if (display) display.textContent = `Your OTP: ${otp}`;
-}
+/* ================= OTP OVERRIDES ================= */
 
-function submitOTP() {
-  const input = document.getElementById('otpInput')?.value;
-  const result = document.getElementById('otpResult');
-  const currentOTP = localStorage.getItem('currentOTP');
+// After correct username/password
+const originalLogin = login;
+login = function () {
+  const u = document.getElementById('user').value;
+  const p = document.getElementById('pass').value;
 
-  if (!input || !result) return;
+  if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
+    addSecurityEvent('LOGIN_SUCCESS');
+    document.getElementById('loginPage').classList.add('hidden');
 
-  result.style.display = 'block';
-  if (input === currentOTP) {
-    result.textContent = 'OTP verified successfully.';
-    result.className = 'success';
-    addSecurityEvent('OTP_VERIFIED');
-    localStorage.removeItem('currentOTP');
-    document.getElementById('secureAccess')?.classList.add('hidden');
-    document.getElementById('dashboard')?.classList.remove('hidden');
-    document.getElementById('topbarUser')?.classList.remove('hidden');
-    updateBalanceDisplay?.();
-    showSection?.('overview');
+    if (twoFactorEnabled) {
+      document.getElementById('secureAccess').classList.remove('hidden');
+      generateAndShowOTP();
+    } else {
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('topbarUser').classList.remove('hidden');
+      updateBalanceDisplay();
+      showSection('overview');
+    }
   } else {
-    result.textContent = 'Incorrect OTP.';
-    result.className = 'error';
-    addSecurityEvent('OTP_FAILED');
+    addSecurityEvent('LOGIN_FAILED');
+    showTempError('loginError');
+  }
+};
+
+// Replace verifyOTP logic
+function verifyOTP() {
+  const input = document.getElementById('otp').value;
+  if (input !== currentOTP) {
+    showTempError('phoneError');
     generateAndShowOTP();
+    return;
   }
 
-  document.getElementById('otpInput').value = '';
-  }
+  addSecurityEvent('OTP_VERIFIED');
+
+  currentOTP = null;
+  document.getElementById('secureAccess').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('topbarUser').classList.remove('hidden');
+  updateBalanceDisplay();
+  showSection('overview');
+  }            
 </script>
 </body>
 </html>
