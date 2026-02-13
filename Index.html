@@ -1299,53 +1299,7 @@ document.addEventListener('DOMContentLoaded', resetSessionTimer);
 // Override existing logout()
 function logout() {
   performLogout();
-}
-
-/* ================= OTP OVERRIDES ================= */
-
-// After correct username/password
-const originalLogin = login;
-login = function () {
-  const u = document.getElementById('user').value;
-  const p = document.getElementById('pass').value;
-
-  if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
-    addSecurityEvent('LOGIN_SUCCESS');
-    document.getElementById('loginPage').classList.add('hidden');
-
-    if (twoFactorEnabled) {
-      document.getElementById('secureAccess').classList.remove('hidden');
-      generateAndShowOTP();
-    } else {
-      document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('topbarUser').classList.remove('hidden');
-      updateBalanceDisplay();
-      showSection('overview');
-    }
-  } else {
-    addSecurityEvent('LOGIN_FAILED');
-    showTempError('loginError');
-  }
-};
-
-// Replace verifyOTP logic
-function verifyOTP() {
-  const input = document.getElementById('otp').value;
-  if (input !== currentOTP) {
-    showTempError('phoneError');
-    generateAndShowOTP();
-    return;
-  }
-
-  addSecurityEvent('OTP_VERIFIED');
-
-  currentOTP = null;
-  document.getElementById('secureAccess').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
-  document.getElementById('topbarUser').classList.remove('hidden');
-  updateBalanceDisplay();
-  showSection('overview');
-  }
+} 
   
   /* ================= OTP PAGE LOGIC ================= */
 
