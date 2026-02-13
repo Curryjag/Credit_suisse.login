@@ -1255,21 +1255,7 @@ function finalizeTransfer() {
 // 3 minutes inactivity
 const SESSION_TIMEOUT_MINUTES = 3;
 let sessionTimer;
-let currentOTP = null;
-
-// Generate OTP
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-// Show OTP on Secure Access screen
-function generateAndShowOTP() {
-  currentOTP = generateOTP();
-  const display = document.getElementById('otpDisplay');
-  if (display) {
-    display.textContent = `Your verification code: ${currentOTP}`;
-  }
-}
+  
 
 // Reset inactivity timer
 function resetSessionTimer() {
