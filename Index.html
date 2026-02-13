@@ -1348,7 +1348,13 @@ function updateOTPCountdown() {
 /* Generate + show new OTP */
 function showNewOTP() {
   currentOTP = generateOTP();
-  document.getElementById('otpDisplay').textContent = `Your verification code: ${currentOTP}`;
+
+  document.getElementById('otpDisplay').textContent =
+    `Your verification code: ${currentOTP}`;
+
+  // Make sure countdown reappears
+  document.getElementById('otpTimer').parentElement.style.display = 'block';
+
   startOTPTimer();
 }
 
