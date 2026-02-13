@@ -854,7 +854,7 @@ function renderSecurityEvents() {
   }, duration);
   }
 
-  function login() {
+  function login(){
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
 
@@ -864,7 +864,6 @@ function renderSecurityEvents() {
 
     if (twoFactorEnabled) {
       document.getElementById('secureAccess').classList.remove('hidden');
-      generateAndShowOTP(); // ✅ correct function
     } else {
       document.getElementById('dashboard').classList.remove('hidden');
       document.getElementById('topbarUser').classList.remove('hidden');
@@ -875,7 +874,7 @@ function renderSecurityEvents() {
     addSecurityEvent('LOGIN_FAILED');
     showTempError('loginError');
   }
-  }  
+}
 
 let accountBalance = 125430.55;
 
@@ -1316,28 +1315,19 @@ function generateOTP() {
 function startOTPTimer() {
   clearInterval(otpTimer);
   otpExpiresIn = 60;
-
-  // Ensure countdown line is visible
-  document.getElementById('otpTimer').parentElement.style.display = 'block';
-
   updateOTPCountdown();
-
   otpTimer = setInterval(() => {
     otpExpiresIn--;
     updateOTPCountdown();
-
     if (otpExpiresIn <= 0) {
       clearInterval(otpTimer);
       currentOTP = null;
-
-      // Hide countdown completely
-      document.getElementById('otpTimer').parentElement.style.display = 'none';
-
-      // Show ONLY expired message
       document.getElementById('otpDisplay').textContent =
         'Your verification code has expired.';
+      document.getElementById('otpTimer').textContent = '0';
     }
-  }, 1000);                            
+  }, 1000);
+}
 
 /* Update countdown text only */
 function updateOTPCountdown() {
@@ -1349,13 +1339,7 @@ function updateOTPCountdown() {
 /* Generate + show new OTP */
 function showNewOTP() {
   currentOTP = generateOTP();
-
-  document.getElementById('otpDisplay').textContent =
-    `Your verification code: ${currentOTP}`;
-
-  // Make sure countdown reappears
-  document.getElementById('otpTimer').parentElement.style.display = 'block';
-
+  document.getElementById('otpDisplay').textContent = `Your verification code: ${currentOTP}`;
   startOTPTimer();
 }
 
