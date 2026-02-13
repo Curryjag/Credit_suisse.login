@@ -1302,7 +1302,6 @@ function logout() {
 } 
   
   /* ================= OTP PAGE LOGIC ================= */
-
 let currentOTP = null;
 let otpTimer = null;
 let otpExpiresIn = 60;
@@ -1317,72 +1316,42 @@ function startOTPTimer() {
   clearInterval(otpTimer);
   otpExpiresIn = 60;
   updateOTPCountdown();
-
   otpTimer = setInterval(() => {
     otpExpiresIn--;
     updateOTPCountdown();
-
     if (otpExpiresIn <= 0) {
       clearInterval(otpTimer);
       currentOTP = null;
       document.getElementById('otpDisplay').textContent =
         'Your verification code has expired.';
+      document.getElementById('otpTimer').textContent = '0';
     }
   }, 1000);
 }
 
-/* Update text display */
+/* Update countdown text only */
 function updateOTPCountdown() {
-  const display = document.getElementById('otpDisplay');
-  if (!display || !currentOTP) return;
-
-  display.textContent =
-    `Your verification code: ${currentOTP} (expires in ${otpExpiresIn}s)`;
+  const timerEl = document.getElementById('otpTimer');
+  if (!timerEl) return;
+  timerEl.textContent = otpExpiresIn;
 }
 
-/* Generate + show OTP */
+/* Generate + show new OTP */
 function showNewOTP() {
   currentOTP = generateOTP();
+  document.getElementById('otpDisplay').textContent = `Your verification code: ${currentOTP}`;
   startOTPTimer();
 }
 
-/* Override login → show OTP page */
-const originalLogin = login;
-login = function () {
-  const u = document.getElementById('user').value;
-  const p = document.getElementById('pass').value;
-
-  if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
-    addSecurityEvent('LOGIN_SUCCESS');
-    document.getElementById('loginPage').classList.add('hidden');
-
-    if (twoFactorEnabled) {
-      document.getElementById('secureAccess').classList.remove('hidden');
-      showNewOTP();
-    } else {
-      document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('topbarUser').classList.remove('hidden');
-      updateBalanceDisplay();
-      showSection('overview');
-    }
-  } else {
-    addSecurityEvent('LOGIN_FAILED');
-    showTempError('loginError');
-  }
-};
-
-/* Verify OTP ONLY */
+/* Verify OTP */
 function verifyOTP() {
   const input = document.getElementById('otp').value;
-
   if (!currentOTP || input !== currentOTP) {
     showTempError('phoneError');
     return;
   }
-
   clearInterval(otpTimer);
   currentOTP = null;
-
   addSecurityEvent('OTP_VERIFIED');
   document.getElementById('secureAccess').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
@@ -1391,9 +1360,8 @@ function verifyOTP() {
   showSection('overview');
 }
 
-/* Resend OTP */
-function resendOTP(e) {
-  e.preventDefault();
+/* Resend OTP — works anytime, immediately generates a new OTP */
+function resendOTP() {
   showNewOTP();
 }
 </script>
