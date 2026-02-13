@@ -554,27 +554,48 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
 
   <!-- SECURE ACCESS -->
   <div id="secureAccess" class="hidden">
-    <div class="main">
-      <div class="card" style="max-width:420px;margin:0 auto;">
-        <h2>Secure Access</h2>
-        <p class="muted">Enter the one-time code sent to your registered device.</p>
-        <div id="otpDisplay" style="margin:10px 0;font-weight:600;color:#002a5c;"></div>
-        
-        <label>Verification code</label>
-        <input type="text" id="otp" placeholder="6-digit code">
+  <div class="main">
+    <div class="card" style="max-width:420px;margin:0 auto;">
+      <h2>Secure Access</h2>
 
-        <button onclick="verifyOTP()">Verify</button>
+      <p class="muted" style="margin-bottom:12px;">
+        Enter the one-time verification code to continue.
+      </p>
 
-        <div id="phoneError" class="muted" style="color:#b91c1c;margin-top:12px;display:none;">
-  Invalid code. Please check the code sent to your phone.
-        </div>
+      <div id="otpDisplay"
+           style="font-size:18px;
+                  font-weight:700;
+                  color:#002a5c;
+                  letter-spacing:2px;
+                  margin-bottom:6px;">
+      </div>
 
-        <div class="muted" style="margin-top:14px;font-size:12px;">
-          Didn’t receive a code? <a href="#" style="color:#003a8f;text-decoration:none;">Resend</a>
-        </div>
+      <div class="muted" style="font-size:12px;margin-bottom:14px;">
+        Code expires in <strong><span id="otpTimer">60</span></strong> seconds
+      </div>
+
+      <label>Verification code</label>
+      <input type="text" id="otp" placeholder="Enter 6-digit code">
+
+      <button onclick="verifyOTP()">Verify</button>
+
+      <div id="phoneError"
+           class="error"
+           style="margin-top:12px;display:none;">
+        Invalid or expired verification code.
+      </div>
+
+      <div class="muted" style="margin-top:14px;font-size:12px;">
+        Didn’t receive a code?
+        <a href="#" onclick="resendOTP();return false;"
+           style="color:#003a8f;text-decoration:none;">
+          Resend
+        </a>
       </div>
     </div>
   </div>
+  </div>
+      
 
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
