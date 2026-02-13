@@ -885,24 +885,6 @@ function updateBalanceDisplay() {
     });
 }
 
-function verifyOTP(){
-  const inputCode = document.getElementById('otp').value;
-  const error = document.getElementById('phoneError');
-
-  if (!inputCode || btoa(inputCode) !== encodedLoginCode) {
-    showTempError('phoneError');
-    return;
-  }
-
-  error.style.display = 'none';
-  document.getElementById('secureAccess').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
-  document.getElementById('topbarUser').classList.remove('hidden');
-
-  updateBalanceDisplay();
-  showSection('overview');
-}
-
 function changePassword() {
   const oldP = document.getElementById('oldPassword').value;
   const newP = document.getElementById('newPassword').value;
