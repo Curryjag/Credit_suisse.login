@@ -1315,19 +1315,28 @@ function generateOTP() {
 function startOTPTimer() {
   clearInterval(otpTimer);
   otpExpiresIn = 60;
+
+  // Ensure countdown line is visible
+  document.getElementById('otpTimer').parentElement.style.display = 'block';
+
   updateOTPCountdown();
+
   otpTimer = setInterval(() => {
     otpExpiresIn--;
     updateOTPCountdown();
+
     if (otpExpiresIn <= 0) {
       clearInterval(otpTimer);
       currentOTP = null;
+
+      // Hide countdown completely
+      document.getElementById('otpTimer').parentElement.style.display = 'none';
+
+      // Show ONLY expired message
       document.getElementById('otpDisplay').textContent =
         'Your verification code has expired.';
-      document.getElementById('otpTimer').textContent = '0';
     }
-  }, 1000);
-}
+  }, 1000);                            
 
 /* Update countdown text only */
 function updateOTPCountdown() {
