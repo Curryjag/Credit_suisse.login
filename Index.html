@@ -1301,69 +1301,99 @@ function logout() {
   performLogout();
 } 
   
-  /* ================= OTP PAGE LOGIC ================= */
+/* ================= OTP PAGE LOGIC (FIXED) ================= */
+
 let currentOTP = null;
-let otpTimer = null;
-let otpExpiresIn = 60;
+let otpInterval = null;
+let otpSeconds = 60;
 
 /* Generate 6-digit OTP */
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-/* Start 60s countdown */
-function startOTPTimer() {
-  clearInterval(otpTimer);
-  otpExpiresIn = 60;
-  updateOTPCountdown();
-  otpTimer = setInterval(() => {
-    otpExpiresIn--;
-    updateOTPCountdown();
-    if (otpExpiresIn <= 0) {
-      clearInterval(otpTimer);
-      currentOTP = null;
-      document.getElementById('otpDisplay').textContent =
-        'Your verification code has expired.';
-      document.getElementById('otpTimer').textContent = '0';
+/* Render OTP + countdown */
+function renderOTP() {
+  document.getElementById('otpDisplay').textContent =
+    `Your verification code: ${currentOTP}`;
+  document.getElementById('otpCountdown').style.display = 'block';
+  document.getElementById('otpTimer').textContent = otpSeconds;
+  document.getElementById('phoneError').style.display = 'none';
+}
+
+/* Start countdown */
+function startCountdown() {
+  clearInterval(otpInterval);
+  otpSeconds = 60;
+  renderOTP();
+
+  otpInterval = setInterval(() => {
+    otpSeconds--;
+    document.getElementById('otpTimer').textContent = otpSeconds;
+
+    if (otpSeconds <= 0) {
+      expireOTP();
     }
   }, 1000);
 }
 
-/* Update countdown text only */
-function updateOTPCountdown() {
-  const timerEl = document.getElementById('otpTimer');
-  if (!timerEl) return;
-  timerEl.textContent = otpExpiresIn;
+/* Expire OTP */
+function expireOTP() {
+  clearInterval(otpInterval);
+  currentOTP = null;
+
+  document.getElementById('otpDisplay').textContent =
+    'Your verification code has expired.';
+  document.getElementById('otpCountdown').style.display = 'none';
 }
 
-/* Generate + show new OTP */
+/* Generate + show OTP (page load & resend ONLY) */
 function showNewOTP() {
   currentOTP = generateOTP();
-  document.getElementById('otpDisplay').textContent = `Your verification code: ${currentOTP}`;
-  startOTPTimer();
+  startCountdown();
 }
 
 /* Verify OTP */
 function verifyOTP() {
-  const input = document.getElementById('otp').value;
+  const input = document.getElementById('otp').value.trim();
+
   if (!currentOTP || input !== currentOTP) {
     showTempError('phoneError');
     return;
   }
-  clearInterval(otpTimer);
+
+  clearInterval(otpInterval);
   currentOTP = null;
+
   addSecurityEvent('OTP_VERIFIED');
+
   document.getElementById('secureAccess').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('topbarUser').classList.remove('hidden');
+
   updateBalanceDisplay();
   showSection('overview');
 }
 
-  /* Resend OTP — works anytime, immediately generates a new OTP */
+/* Resend OTP */
 function resendOTP() {
   showNewOTP();
 }
+
+/* Auto-generate OTP when OTP page becomes visible */
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new MutationObserver(() => {
+    const otpPage = document.getElementById('secureAccess');
+    if (!otpPage.classList.contains('hidden') && !currentOTP) {
+      showNewOTP();
+    }
+  });
+
+  observer.observe(document.getElementById('secureAccess'), {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+});
 </script>
 </body>
 </html>
