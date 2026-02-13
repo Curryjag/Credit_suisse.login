@@ -854,7 +854,7 @@ function renderSecurityEvents() {
   }, duration);
   }
 
-  function login(){
+  function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
 
@@ -864,6 +864,7 @@ function renderSecurityEvents() {
 
     if (twoFactorEnabled) {
       document.getElementById('secureAccess').classList.remove('hidden');
+      showNewOTP();
     } else {
       document.getElementById('dashboard').classList.remove('hidden');
       document.getElementById('topbarUser').classList.remove('hidden');
