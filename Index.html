@@ -1311,20 +1311,30 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-/* Start 60s countdown */
+/* Start countdown */
 function startOTPTimer() {
   clearInterval(otpTimer);
   otpExpiresIn = 60;
+
+  // Show countdown and OTP display if hidden
+  document.getElementById('otpTimer').parentElement.style.display = 'block';
+  document.getElementById('otpDisplay').style.color = '#002a5c';
+
   updateOTPCountdown();
+
   otpTimer = setInterval(() => {
     otpExpiresIn--;
     updateOTPCountdown();
+
     if (otpExpiresIn <= 0) {
       clearInterval(otpTimer);
       currentOTP = null;
+
+      // Hide countdown entirely
+      document.getElementById('otpTimer').parentElement.style.display = 'none';
+      // Show expiration message
       document.getElementById('otpDisplay').textContent =
         'Your verification code has expired.';
-      document.getElementById('otpTimer').textContent = '0';
     }
   }, 1000);
 }
@@ -1340,6 +1350,10 @@ function updateOTPCountdown() {
 function showNewOTP() {
   currentOTP = generateOTP();
   document.getElementById('otpDisplay').textContent = `Your verification code: ${currentOTP}`;
+
+  // Ensure countdown container is visible
+  document.getElementById('otpTimer').parentElement.style.display = 'block';
+
   startOTPTimer();
 }
 
