@@ -1345,7 +1345,103 @@ function verifyOTP() {
   document.getElementById('topbarUser').classList.remove('hidden');
   updateBalanceDisplay();
   showSection('overview');
-  }            
+  }
+  
+  /* ================= OTP PAGE LOGIC ================= */
+
+let currentOTP = null;
+let otpTimer = null;
+let otpExpiresIn = 60;
+
+/* Generate 6-digit OTP */
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+/* Start 60s countdown */
+function startOTPTimer() {
+  clearInterval(otpTimer);
+  otpExpiresIn = 60;
+  updateOTPCountdown();
+
+  otpTimer = setInterval(() => {
+    otpExpiresIn--;
+    updateOTPCountdown();
+
+    if (otpExpiresIn <= 0) {
+      clearInterval(otpTimer);
+      currentOTP = null;
+      document.getElementById('otpDisplay').textContent =
+        'Your verification code has expired.';
+    }
+  }, 1000);
+}
+
+/* Update text display */
+function updateOTPCountdown() {
+  const display = document.getElementById('otpDisplay');
+  if (!display || !currentOTP) return;
+
+  display.textContent =
+    `Your verification code: ${currentOTP} (expires in ${otpExpiresIn}s)`;
+}
+
+/* Generate + show OTP */
+function showNewOTP() {
+  currentOTP = generateOTP();
+  startOTPTimer();
+}
+
+/* Override login → show OTP page */
+const originalLogin = login;
+login = function () {
+  const u = document.getElementById('user').value;
+  const p = document.getElementById('pass').value;
+
+  if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
+    addSecurityEvent('LOGIN_SUCCESS');
+    document.getElementById('loginPage').classList.add('hidden');
+
+    if (twoFactorEnabled) {
+      document.getElementById('secureAccess').classList.remove('hidden');
+      showNewOTP();
+    } else {
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('topbarUser').classList.remove('hidden');
+      updateBalanceDisplay();
+      showSection('overview');
+    }
+  } else {
+    addSecurityEvent('LOGIN_FAILED');
+    showTempError('loginError');
+  }
+};
+
+/* Verify OTP ONLY */
+function verifyOTP() {
+  const input = document.getElementById('otp').value;
+
+  if (!currentOTP || input !== currentOTP) {
+    showTempError('phoneError');
+    return;
+  }
+
+  clearInterval(otpTimer);
+  currentOTP = null;
+
+  addSecurityEvent('OTP_VERIFIED');
+  document.getElementById('secureAccess').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('topbarUser').classList.remove('hidden');
+  updateBalanceDisplay();
+  showSection('overview');
+}
+
+/* Resend OTP */
+function resendOTP(e) {
+  e.preventDefault();
+  showNewOTP();
+}
 </script>
 </body>
 </html>
