@@ -864,6 +864,7 @@ function renderSecurityEvents() {
 
     if (twoFactorEnabled) {
       document.getElementById('secureAccess').classList.remove('hidden');
+      generateAndShowOTP(); // ✅ correct function
     } else {
       document.getElementById('dashboard').classList.remove('hidden');
       document.getElementById('topbarUser').classList.remove('hidden');
@@ -874,7 +875,7 @@ function renderSecurityEvents() {
     addSecurityEvent('LOGIN_FAILED');
     showTempError('loginError');
   }
-}
+  }  
 
 let accountBalance = 125430.55;
 
