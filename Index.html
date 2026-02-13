@@ -864,7 +864,6 @@ function renderSecurityEvents() {
 
     if (twoFactorEnabled) {
       document.getElementById('secureAccess').classList.remove('hidden');
-      generateAndShowOTP();
     } else {
       document.getElementById('dashboard').classList.remove('hidden');
       document.getElementById('topbarUser').classList.remove('hidden');
