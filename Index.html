@@ -872,6 +872,19 @@ function renderSecurityEvents() {
     const loadingMsg = document.getElementById('loginLoading');
     loadingMsg.classList.remove('hidden');
 
+    // Rotate loading text (no animation, banking-style)
+const loadingTexts = [
+  'Fetching your account...',
+  'Verifying your credentials...',
+  'Preparing secure access...'
+];
+
+let textIndex = 0;
+const loadingInterval = setInterval(() => {
+  loadingMsg.textContent = loadingTexts[textIndex];
+  textIndex = (textIndex + 1) % loadingTexts.length;
+}, 3000);
+
     // Disable button to prevent double-click
     const loginBtn = document.querySelector('#loginPage button[type="submit"]');
     loginBtn.disabled = true;
