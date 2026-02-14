@@ -858,27 +858,52 @@ function renderSecurityEvents() {
   }, duration);
   }
 
-  function login(){
+  function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
 
   if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
     addSecurityEvent('LOGIN_SUCCESS');
-    document.getElementById('loginPage').classList.add('hidden');
 
-    if (twoFactorEnabled) {
-      document.getElementById('secureAccess').classList.remove('hidden');
-    } else {
-      document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('topbarUser').classList.remove('hidden');
-      updateBalanceDisplay();
-      showSection('overview');
-    }
+    // Hide login error if it was shown
+    document.getElementById('loginError').style.display = 'none';
+
+    // Show fetching message
+    const loadingMsg = document.getElementById('loginLoading');
+    loadingMsg.classList.remove('hidden');
+
+    // Disable button to prevent double-click
+    const loginBtn = document.querySelector('#loginPage button[type="submit"]');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Logging in...';
+
+    // Simulate account fetch
+    setTimeout(() => {
+      // Hide login page
+      document.getElementById('loginPage').classList.add('hidden');
+
+      // Show OTP or dashboard
+      if (twoFactorEnabled) {
+        document.getElementById('secureAccess').classList.remove('hidden');
+        showNewOTP();
+      } else {
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('topbarUser').classList.remove('hidden');
+        updateBalanceDisplay();
+        showSection('overview');
+      }
+
+      // Reset UI
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Log in';
+      loadingMsg.classList.add('hidden');
+    }, 1200);
+
   } else {
     addSecurityEvent('LOGIN_FAILED');
     showTempError('loginError');
   }
-}
+  }
 
 let accountBalance = 125430.55;
 
