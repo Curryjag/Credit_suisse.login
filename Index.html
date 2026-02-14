@@ -503,20 +503,22 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   font-weight: 600;
 }
 
-html, body {
-    height: 100%;
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #f2f4f7;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    padding: 12px 0;
+    z-index: 10;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
+    padding-bottom: 48px; /* must match footer height */
 }
-
-#loginPage,
-#secureAccess,
-#dashboard {
-    flex: 1;
-}    
 </style>
 </head>
 <body>
