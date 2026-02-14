@@ -892,6 +892,8 @@ const loadingInterval = setInterval(() => {
 
     // Simulate account fetch
     setTimeout(() => {
+      clearInterval(loadingInterval);
+      
       // Hide login page
       document.getElementById('loginPage').classList.add('hidden');
 
