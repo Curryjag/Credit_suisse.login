@@ -503,19 +503,9 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   font-weight: 600;
 }
 
-#loginPage,
-#secureAccess,
-#dashboard {
-    min-height: calc(100vh - 72px); /* 72px = topbar height */
-    display: flex;
-    flex-direction: column;
+.footer-spacer {
+    height: calc(100vh - 100%);
 }
-
-#loginPage footer,
-#secureAccess footer,
-#dashboard footer {
-    margin-top: auto;
-    }
 </style>
 </head>
 <body>
@@ -564,6 +554,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
       </div>
     </div>
 
+    <div class="footer-spacer"></div>
     <footer>
       © 2026 Your Company. All rights reserved.
     </footer>
@@ -805,6 +796,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   </div>
 </div>
 
+    <div class="footer-spacer"></div>
     <footer style="text-align:center;font-size:12px;color:#6b7280;margin:20px 0;">
       © 2026 Your Company. All rights reserved. | Privacy Policy | Legal Notice | Cookies
     </footer>
