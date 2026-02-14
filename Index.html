@@ -649,39 +649,36 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
            style="margin-bottom:14px;padding:10px;border-radius:4px;font-size:14px;"></div>
 
       <!-- STEP 1: Transfer Type -->
-      <div id="transferStep1">
-        <label>Select Transfer Type</label>
-        <select id="transferType">
-          <option value="">-- Select --</option>
-          <option value="sepa">SEPA Transfer</option>
-          <option value="wire">International Wire</option>
-          <option value="internal">Internal Transfer</option>
-          <option value="fx">FX Transfer</option>
-        </select>
+      <div
         <button onclick="nextTransferStep()">Continue</button>
       </div>
 
-      <!-- STEP 2: Beneficiary & Amount -->
-      <div id="transferStep2" class="hidden">
-        <label>Beneficiary Name</label>
-        <input type="text" id="beneficiaryName" placeholder="Full Name">
-        <label>Bank Name</label>
-        <input type="text" id="bankName" placeholder="Bank Name">
-        <label>IBAN / Account Number</label>
-        <input type="text" id="accountNumber" placeholder="IBAN or Account Number">
-        <label>SWIFT / BIC</label>
-        <input type="text" id="swiftBic" placeholder="SWIFT / BIC">
-        <label>Country</label>
-        <input type="text" id="country" placeholder="Country">
-        <label>Amount</label>
-        <input type="text" id="transferAmount" placeholder="Amount">
-        <label>Currency</label>
-        <input type="text" id="transferCurrency" placeholder="Currency">
-        <label>Reference</label>
-        <input type="text" id="transferReference" placeholder="Reference">
-        <button onclick="nextTransferStep()">Review Transfer</button>
-      </div>
+      <!-- STEP 1 -->
+<div id="transferStep1">
+  <label>Select Transfer Type</label>
+  <select id="transferType">
+    <option value="">-- Select --</option>
+    <option value="sepa">SEPA Transfer</option>
+    <option value="wire">International Wire</option>
+    <option value="internal">Internal Transfer</option>
+    <option value="fx">FX Transfer</option>
+  </select>
+  <button onclick="goToStep2(this)">Continue</button>
+</div>
 
+<!-- STEP 2 -->
+<div id="transferStep2" class="hidden">
+  <label>Beneficiary Name</label><input type="text" id="beneficiaryName" placeholder="Full Name">
+  <label>Bank Name</label><input type="text" id="bankName" placeholder="Bank Name">
+  <label>IBAN / Account Number</label><input type="text" id="accountNumber" placeholder="IBAN or Account Number">
+  <label>SWIFT / BIC</label><input type="text" id="swiftBic" placeholder="SWIFT / BIC">
+  <label>Country</label><input type="text" id="country" placeholder="Country">
+  <label>Amount</label><input type="text" id="transferAmount" placeholder="Amount">
+  <label>Currency</label><input type="text" id="transferCurrency" placeholder="Currency">
+  <label>Reference</label><input type="text" id="transferReference" placeholder="Reference">
+  <button onclick="goToStep3(this)">Review Transfer</button>
+</div>
+        
       <!-- STEP 3: Review + COT -->
       <div id="transferStep3" class="hidden">
         <p><strong>COT Code Required</strong></p>
