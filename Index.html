@@ -502,6 +502,19 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   color: #b91c1c; /* red error */
   font-weight: 600;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* ensures it stays above other elements */
+    background: #f2f4f7; /* optional: match page background */
+    padding: 12px 0;     /* adjust spacing */
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+}
 </style>
 </head>
 <body>
