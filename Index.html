@@ -503,15 +503,15 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   font-weight: 600;
 }
    
-#dashboard {
+.dash-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* ensures container is at least full screen */
+    min-height: 100vh; /* full viewport height */
 }
 
-#dashboard footer {
-    margin-top: auto; /* pushes footer to the bottom */
-}  
+.dashboard-content {
+    flex: 1; /* takes remaining space, pushes footer down */
+}
    
 .footer-spacer {
     height: calc(100vh - 100%);
@@ -618,6 +618,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
     <div class="dash-wrapper">
+      <div id="dashboardContent">
       <div id="transferBanner" 
      style="position:fixed;top:72px;left:50%;transform:translateX(-50%);padding:12px 20px;
             border-radius:6px;font-weight:600;font-size:14px;color:#fff;
@@ -806,7 +807,7 @@ footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280
   </div>
 </div>
 
-    <div class="footer-spacer"></div>
+  
     <footer style="text-align:center;font-size:12px;color:#6b7280;margin:20px 0;">
       © 2026 Your Company. All rights reserved. | Privacy Policy | Legal Notice | Cookies
     </footer>
