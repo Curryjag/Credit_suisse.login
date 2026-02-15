@@ -1499,6 +1499,24 @@ showSection = function (id) {
   localStorage.setItem(LAST_SECTION_KEY, id);
   originalShowSection(id);
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Only clear if we're on the login page
+  if (!document.getElementById('loginPage')?.classList.contains('hidden')) {
+    
+    // Clear all input fields
+    document.querySelectorAll('input').forEach(input => input.value = '');
+
+    // Clear all textareas
+    document.querySelectorAll('textarea').forEach(area => area.value = '');
+
+    // Reset all selects (dropdowns) to first option
+    document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+
+    // Uncheck any checkboxes or radio buttons
+    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(box => box.checked = false);
+  }
+});
 </script>
 </body>
 </html>
