@@ -1072,7 +1072,7 @@ function toggle2FA() {
     });
   }
   
-<script>
+
   function drawInvestmentsChart() {
     const canvas = document.getElementById('investmentsChart');
     if (!canvas) return;
@@ -1118,42 +1118,6 @@ function toggle2FA() {
       ${overallPerf >= 0 ? '▲' : '▼'} Overall Performance: ${overallPerf}%</span>`;
     }
   }
-
-let livePerformance = 3.2;
-
-// tight, realistic banking range
-const PERF_MIN = 2.8;
-const PERF_MAX = 3.8;
-const BASE_VALUE = 40250;
-
-function updateLiveInvestmentNumbers() {
-  const summary = document.getElementById('investmentsSummary');
-  if (!summary) return;
-
-  // very small drift
-  const delta = (Math.random() * 0.2) - 0.1;
-  livePerformance = Math.min(
-    PERF_MAX,
-    Math.max(PERF_MIN, livePerformance + delta)
-  );
-
-  const value = BASE_VALUE * (1 + livePerformance / 100);
-
-  summary.innerHTML = `
-    <strong>Total Portfolio Value:</strong>
-    CHF ${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-    <br>
-    <span style="color:#22c55e;">
-      ▲ Overall Performance: ${livePerformance.toFixed(1)}%
-    </span>
-  `;
-}
-
-// let chart render first, then go live
-setTimeout(() => {
-  setInterval(updateLiveInvestmentNumbers, 6000);
-}, 500);
-</script>
 
   const headlines = [
     { title: "Swiss Market Index rises", summary: "Investors optimistic after strong Q4 earnings." },
