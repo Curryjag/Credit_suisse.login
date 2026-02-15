@@ -544,14 +544,37 @@ button:active {
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <div id="logo" style="height:50px; display:flex; align-items:center; position:relative; z-index:10;">
-  <img src="https://res.cloudinary.com/do9yjpizs/image/upload/v1771185812/wn6e9zmpiinkjfeydgna.png" 
-       alt="My Logo" 
-       style="height:40px; display:block;">
-</div>
-    <div class="topbar-user hidden" id="topbarUser">Welcome, <strong>Gerard</strong> | <a href="#" onclick="logout()">Log out</a></div>
+  <div class="topbar" style="
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+">
+
+  <!-- Logo (left) -->
+  <div id="logo" style="
+    height:50px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    z-index:10;
+  ">
+    <img src="https://res.cloudinary.com/do9yjpizs/image/upload/v1771185812/wn6e9zmpiinkjfeydgna.png"
+         alt="My Logo"
+         style="height:40px; display:block;">
   </div>
+
+  <!-- User info (right) -->
+  <div class="topbar-user hidden" id="topbarUser" style="
+    display:flex;
+    align-items:center;
+    gap:14px;
+    white-space:nowrap;
+  ">
+    <span>Welcome, <strong>Gerard</strong></span>
+    <a href="#" onclick="logout()" style="text-decoration:underline;">Log out</a>
+  </div>
+</div>
 
   <!-- LOGIN PAGE -->
   <div id="loginPage">
