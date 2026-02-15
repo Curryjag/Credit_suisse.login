@@ -1460,6 +1460,37 @@ document.addEventListener('DOMContentLoaded', () => {
     attributeFilter: ['class']
   });
 });
+
+/* ================= SESSION PERSISTENCE (REFRESH SAFE) ================= */
+
+const SESSION_KEY = 'bankSessionActive';
+const LAST_SECTION_KEY = 'bankLastSection';
+
+/* Restore session on page refresh */
+document.addEventListener('DOMContentLoaded', () => {
+  const sessionActive = localStorage.getItem(SESSION_KEY) === 'true';
+
+  if (sessionActive) {
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('secureAccess').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('topbarUser').classList.remove('hidden');
+
+    updateBalanceDisplay();
+
+    const lastSection =
+      localStorage.getItem(LAST_SECTION_KEY) || 'overview';
+
+    showSection(lastSection);
+  }
+});
+
+/* Save last active dashboard section */
+const originalShowSection = showSection;
+showSection = function (id) {
+  localStorage.setItem(LAST_SECTION_KEY, id);
+  originalShowSection(id);
+};
 </script>
 </body>
 </html>
