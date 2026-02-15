@@ -1433,6 +1433,9 @@ function verifyOTP() {
     return;
   }
 
+  localStorage.setItem(SESSION_KEY, 'true');
+localStorage.setItem(LAST_SECTION_KEY, 'overview');
+
   clearInterval(otpInterval);
   currentOTP = null;
 
