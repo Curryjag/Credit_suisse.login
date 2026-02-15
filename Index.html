@@ -1334,10 +1334,14 @@ function resetSessionTimer() {
 
 // Central logout (used by timeout AND manual logout)
 function performLogout() {
+  // Clear session persistence
+  localStorage.removeItem('bankSessionActive');
+  localStorage.removeItem('bankLastSection');
+
   addSecurityEvent('LOGOUT');
 
   // Clear sensitive fields
-  ['user','pass','otp'].forEach(id => {
+  ['user', 'pass', 'otp'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -1350,9 +1354,10 @@ function performLogout() {
   document.getElementById('topbarUser')?.classList.add('hidden');
   document.getElementById('loginPage')?.classList.remove('hidden');
 
-  // Full refresh (keeps localStorage)
+  // Full refresh (keeps localStorage state clean)
   setTimeout(() => location.reload(), 100);
-}
+                          }
+
 
 // Activity listeners
 ['mousemove','keydown','click','touchstart'].forEach(evt =>
