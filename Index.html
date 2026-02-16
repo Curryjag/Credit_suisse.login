@@ -541,6 +541,11 @@ button:active {
 #otpCountdown {
   animation: softPulse 2s ease-in-out infinite;
 }
+
+.topbar-user a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
 </style>
 </head>
 <body>
@@ -572,7 +577,13 @@ button:active {
     white-space:nowrap;
   ">
     <span>Welcome, <strong>Gerard</strong></span>
-    <a href="#" onclick="logout()" style="text-decoration:underline;">Log out</a>
+    <a href="#" onclick="logout()" style="
+  color:rgba(255,255,255,0.7);
+  font-size:14px;
+  text-decoration:none;
+">
+  Log out
+    </a>
   </div>
 </div>
 
