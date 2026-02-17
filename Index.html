@@ -932,6 +932,12 @@ let accountReactivated = false;
   document.getElementById('reactivationOverlay')?.classList.remove('hidden');
   }
 
+  function openSupportChat() {
+  if (window.tidioChatApi) {
+    window.tidioChatApi.open();
+  }
+  }
+
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) return JSON.parse(saved);
