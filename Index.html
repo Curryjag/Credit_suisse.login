@@ -1632,6 +1632,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.getItem(LAST_SECTION_KEY) || 'overview';
 
     showSection(lastSection);
+
+    applyAccountLock();
   }
 });
 
