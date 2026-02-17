@@ -925,6 +925,13 @@ button:active {
   /* ================= ACCOUNT REACTIVATION FLAG ================= */
 let accountReactivated = false;
 
+  function applyAccountLock() {
+  if (accountReactivated) return;
+
+  document.body.classList.add('dashboard-locked');
+  document.getElementById('reactivationOverlay')?.classList.remove('hidden');
+  }
+
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) return JSON.parse(saved);
