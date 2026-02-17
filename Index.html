@@ -922,6 +922,9 @@ button:active {
   const encodedUser = btoa('demoUser');
   const STORAGE_KEY = 'bankState';
 
+  /* ================= ACCOUNT REACTIVATION FLAG ================= */
+let accountReactivated = false;
+
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) return JSON.parse(saved);
